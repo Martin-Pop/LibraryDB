@@ -79,6 +79,35 @@ class DatabaseConnectionManager:
         finally:
             cursor.close()
 
+    def execute_get_output(self, query, params=None, fetch_all=False):
+        """
+        Executes query and gets output
+        :param fetch_all: True to fetch all rows otherwise fetches one row
+        :param query: query to execute
+        :param params: query parameters
+        :return: first output from first command of the query
+        """
+        self._establish_connection()
+        cursor = self._connection.cursor()
+        try:
+            if params:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
+
+            if fetch_all:
+                out = cursor.fetchall()
+            else:
+                out = cursor.fetchone()
+
+            self._connection.commit()
+            return out
+        except pyodbc.Error:
+            self._connection.rollback()
+            raise
+        finally:
+            cursor.close()
+
     def begin_transaction(self):
         self._establish_connection()
         self._connection.autocommit = False
