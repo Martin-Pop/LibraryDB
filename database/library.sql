@@ -2,7 +2,7 @@ create database my_library;
 use my_library;
 
 -- customer
-create table customer (
+create table customers (
     id int primary key identity(1,1),
 	code varchar(20) unique not null,
 	first_name varchar(100) not null,
@@ -47,7 +47,7 @@ create table copies (
 -- loans
 create table loans (
     id int primary key identity(1,1),
-    customer_id int references customer(id),
+    customer_id int references customers(id),
     copy_id int references copies(id),
     loan_date datetime default getdate(), 
     return_date datetime null 
