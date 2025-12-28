@@ -18,7 +18,8 @@ create table titles (
     title varchar(200) not null,
     isbn varchar(20),
     page_count int,
-    price decimal(10,2) not null
+    price decimal(10,2) not null,
+    description varchar(200)
 );
 
 -- authors
@@ -40,6 +41,7 @@ create table title_authors (
 create table copies (
     id int primary key identity(1,1),
     title_id int references titles(id),
+	code varchar(20) unique not null,
     location varchar(50),
     status varchar(20) check (status in ('available', 'on_loan', 'lost', 'discarded')) 
 );
