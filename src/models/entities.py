@@ -18,6 +18,7 @@ class Author:
 @dataclass
 class Title:
     id: int
+    author: Author
     title: str
     isbn: str
     description: str
@@ -28,7 +29,7 @@ class Title:
 class Copy:
     id: int
     title: Title
-    author: Author
+    code: str
     location: str
     status: CopyStatus
 

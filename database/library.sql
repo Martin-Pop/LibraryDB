@@ -1,6 +1,7 @@
 create database my_library;
 use my_library;
 
+
 -- customer
 create table customers (
     id int primary key identity(1,1),
@@ -12,16 +13,6 @@ create table customers (
     registration_date datetime default getdate()
 );
 
--- titles
-create table titles (
-    id int primary key identity(1,1),
-    title varchar(200) not null,
-    isbn varchar(20),
-    page_count int,
-    price decimal(10,2) not null,
-    description varchar(200)
-);
-
 -- authors
 create table authors (
     id int primary key identity(1,1),
@@ -30,11 +21,15 @@ create table authors (
     nationality varchar(50)
 );
 
--- title_authors
-create table title_authors (
-    title_id int references titles(id),
-    author_id int references authors(id),
-    primary key (title_id, author_id)
+-- titles
+create table titles (
+    id int primary key identity(1,1),
+	author_id int foreign key references authors(id),
+    title varchar(200) not null,
+    isbn varchar(20),
+    page_count int,
+    price decimal(10,2) not null,
+    description varchar(200)
 );
 
 -- copies
