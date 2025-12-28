@@ -1,7 +1,8 @@
 from database_access.config_loader import ConfigLoader
 from src.database_access.database_connection import DatabaseConnectionManager
-from src.daos.customer_dao import CustomerDAO
 from src.models.entities import Customer
+
+from src.services.customer_service import CustomerService
 
 from datetime import datetime
 
@@ -15,7 +16,7 @@ if __name__ == '__main__':
 
     try:
 
-        customer_dao = CustomerDAO(db_manager)
+        customer_service = CustomerService(db_manager)
 
         new_customer = Customer(
             id=0,
@@ -29,13 +30,17 @@ if __name__ == '__main__':
 
         #test
         try:
+            pass
+            # is_success = customer_dao.create(new_customer)
+            #
+            # if is_success:
+            #     print("Success.")
+            # else:
+            #     print("No change")
+            # print(cust)
 
-            is_success = customer_dao.create(new_customer)
-
-            if is_success:
-                print("Success.")
-            else:
-                print("No change")
+            # newcust = customer_service.register_customer("Hhh", "idk", "s@sss.com")
+            # cust = customer_service.get_customers(5,10)
 
         except Exception as e:
             print(f"Error: {e}")

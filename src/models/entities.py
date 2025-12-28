@@ -13,12 +13,14 @@ class Author:
     id: int
     first_name: str
     last_name: str
+    nationality: str | None
 
 @dataclass
 class Title:
     id: int
     title: str
     isbn: str
+    description: str
     page_count: int
     price: float
 
