@@ -46,4 +46,4 @@ class Loan:
     customer: Customer
     copy: Copy
     loan_date: datetime
-    return_date: datetime
+    return_date: datetime | None

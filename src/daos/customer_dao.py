@@ -61,3 +61,8 @@ class CustomerDAO:
 
         rows_affected = self._db.execute(sql, (is_active_value, customer_id))
         return rows_affected > 0
+
+    def does_code_exist(self, code: str) -> bool:
+        sql = "select 1 from customers where code = ?"
+        result = self._db.fetch_one(sql, (code,))
+        return result is not None
