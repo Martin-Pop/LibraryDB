@@ -4,6 +4,41 @@ class CustomerDAO:
     def __init__(self, db_manager):
         self._db = db_manager
 
+    def get_customers(self, offset: int, limit: int) -> list:
+        """
+        Retrieves list of customers.
+        :param offset: Number of rows to skip.
+        :param limit: Number of rows to return.
+        """
+
+        # order by required?
+        sql = """
+            select id, code, first_name, last_name, email, is_active, registration_date 
+            from customers 
+            order by id 
+            offset ? rows 
+            fetch next ? rows only
+        """
+
+        rows = self._db.fetch_all(sql, (offset, limit))
+
+        customers = []
+        for row in rows:
+            print(row)
+            customer = Customer(
+                id=row[0],
+                code=row[1],
+                first_name=row[2],
+                last_name=row[3],
+                email=row[4],
+                is_active=row[5],
+                registered_on=row[6]
+            )
+            customers.append(customer)
+
+        return customers
+
+
     def create(self, customer: Customer) -> bool:
         sql = """
             insert into customers (code, first_name, last_name, email, is_active, registration_date)

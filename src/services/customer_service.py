@@ -12,6 +12,10 @@ class CustomerService:
         self._dao = CustomerDAO(db_manager)
 
     def _generate_customer_code(self):
+        """
+        Generates a random customer code.
+        :return: new customer code
+        """
         chars = string.ascii_uppercase + string.digits
         random_part = ''.join(random.choice(chars) for _ in range(8))
         return f"CUSTOMER-{random_part}"
@@ -65,3 +69,12 @@ class CustomerService:
 
         self._dao.create(customer)
         return customer
+
+    def get_customers(self, offset, limit):
+        """
+        Gets a list of customers
+        :param offset: Number of rows to skip.
+        :param limit: Number of rows to return.
+        :return: list of customers
+        """
+        return self._dao.get_customers(offset, limit)
