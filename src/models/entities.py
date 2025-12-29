@@ -20,10 +20,10 @@ class Title:
     id: int
     author: Author
     title: str
-    isbn: str
-    description: str
-    page_count: int
+    isbn: str | None
+    page_count: int | None
     price: float
+    description: str | None
 
 @dataclass
 class Copy:

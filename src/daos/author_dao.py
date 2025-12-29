@@ -1,4 +1,6 @@
 from src.models.entities import Author
+from src.utils import InvalidParameterException
+
 
 class AuthorDAO:
 
@@ -7,7 +9,11 @@ class AuthorDAO:
 
     def get_by_id(self, author_id: int) -> Author:
         sql = "select first_name, last_name, nationality from authors where id = ?"
-        return self._db.fetchone(sql, (author_id,))
+        row = self._db.fetch_one(sql, (author_id,))
+        if not row:
+            raise InvalidParameterException("Author not found")
+
+        return Author(author_id, *row)
 
     def get_authors(self, offset: int, limit: int) -> list:
         sql = """

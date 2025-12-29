@@ -1,15 +1,19 @@
-from database_access.config_loader import ConfigLoader
+from src.database_access.config_loader import ConfigLoader
 from src.database_access.database_connection import DatabaseConnectionManager
 from src.models.entities import Customer
 
 from src.services.customer_service import CustomerService
 from src.services.author_service import AuthorService
+from src.services.title_service import TitleService
 
 from datetime import datetime
-
+import os
 if __name__ == '__main__':
 
-    config_loader = ConfigLoader('../config/db_config.json')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(current_dir, '..' ,'config', 'db_config.json')
+
+    config_loader = ConfigLoader(config_path)
     connection_string = config_loader.get_connection_string()
 
     db_manager = DatabaseConnectionManager(connection_string)
@@ -34,7 +38,7 @@ if __name__ == '__main__':
         # success = customer_service.remove_customer(3)
         # print(f"Removed customer: {success}")
 
-        author_service = AuthorService(db_manager)
+        # author_service = AuthorService(db_manager)
         #add
         # new_author = author_service.add_new_author("John", "Doe", "USA")
         # print("new author:" + repr(new_author))
@@ -51,7 +55,24 @@ if __name__ == '__main__':
         # auths = author_service.get_authors(0,10)
         # print(auths)
 
-    except Exception as e:
-        print(f"Err: {e}")
+        title_service = TitleService(db_manager)
+        #add
+        # new_title = title_service.add_new_title(2,"se", None, 5, 99.50, None)
+        # print('created' + repr(new_title))
+
+        #update
+        # success = title_service.update_title(5,2,"se", None, 5, 1000, None)
+        # print(success)
+
+        #delete
+        # succes =  title_service.remove_title(1)
+        # print(succes)
+
+        #select
+        # titles = title_service.get_titles(0,10)
+        # print(titles)
+
+    # except Exception as e:
+    #     print(f"Err: {e}")
     finally:
         print('closing')

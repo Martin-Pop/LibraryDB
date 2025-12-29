@@ -17,7 +17,7 @@ class AuthorService:
         if len(first_name) < 1:
             raise InvalidParameterException("Invalid author parameters: First name must be at least 1 character")
 
-    def add_new_author(self, first_name: str, last_name: str, nationality: str | None) -> Author:
+    def add_new_author(self, first_name: str, last_name: str, nationality: str | None) -> Author | None:
         """
         Adds new author
         :param first_name: authors first name
@@ -32,9 +32,9 @@ class AuthorService:
         self._validate(first_name)
 
         author = Author(0, first_name, last_name, nationality)
-        self._dao.create(author)
-
-        return author
+        if self._dao.create(author):
+            return author
+        return None
 
     def update_author(self, _id: int, first_name: str, last_name: str, nationality: str | None) -> bool:
         """
