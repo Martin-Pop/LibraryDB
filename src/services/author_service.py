@@ -7,58 +7,60 @@ class AuthorService:
     def __init__(self, db_manager):
         self._dao = AuthorDAO(db_manager)
 
-    def _validate(self, first_name, last_name, nationality):
-        errors = []
-
-        if not isinstance(first_name, str):
-            errors.append(f"First name must be str got: {type(first_name).__name__}")
-
-        if not isinstance(last_name, str):
-            errors.append(f"Last name must be str got: {type(last_name).__name__}")
-
-        if not isinstance(nationality, str):
-            errors.append(f"Nationality must be str got: {type(nationality).__name__}")
-
-        first_name = first_name.strip()
-        last_name = last_name.strip()
-        nationality = nationality.strip()
+    def _validate(self, first_name: str):
+        """
+        Validates authors parameters
+        :param first_name: first name must be at least 1 character long
+        :raises: InvalidParameterException if invalid parameters
+        """
 
         if len(first_name) < 1:
-            errors.append(f"First name must be at least 1 character")
+            raise InvalidParameterException("Invalid author parameters: First name must be at least 1 character")
 
-        return errors, first_name, last_name, nationality
+    def add_new_author(self, first_name: str, last_name: str, nationality: str | None) -> Author:
+        """
+        Adds new author
+        :param first_name: authors first name
+        :param last_name: authors last name
+        :param nationality: authors nationality (can be None)
+        :return: author object
+        """
+        first_name = first_name.strip() if first_name else ""
+        last_name = last_name.strip() if last_name else ""
+        nationality = nationality.strip() if nationality else None
 
-    def add_new_author(self, first_name, last_name, nationality):
+        self._validate(first_name)
 
-        errors, first_name, last_name, nationality = self._validate(first_name, last_name, nationality)
-
-        if len(errors) > 0:
-            raise InvalidParameterException("Invalid author parameters" + "\n".join(errors))
-
-        author = Author(
-            id=0,
-            first_name=first_name,
-            last_name=last_name,
-            nationality=nationality,
-        )
-
+        author = Author(0, first_name, last_name, nationality)
         self._dao.create(author)
+
         return author
 
-    def update_author(self, _id, first_name, last_name, nationality):
+    def update_author(self, _id: int, first_name: str, last_name: str, nationality: str | None) -> bool:
+        """
+        Updates author
+        :param _id: authors db id
+        :param first_name: authors first name
+        :param last_name: authors last name
+        :param nationality: authors nationality (can be None)
+        :return: True if update was success else False
+        """
+        first_name = first_name.strip() if first_name else ""
+        last_name = last_name.strip() if last_name else ""
+        nationality = nationality.strip() if nationality else None
 
-        errors, first_name, last_name, nationality = self._validate(first_name, last_name, nationality)
-        if len(errors) > 0:
-            raise InvalidParameterException("Invalid author parameters" + "\n".join(errors))
+        self._validate(first_name)
 
-        author = Author(
-            id=_id,
-            first_name=first_name,
-            last_name=last_name,
-            nationality=nationality,
-        )
-
+        author = Author(_id, first_name, last_name, nationality)
         return self._dao.update(author)
 
-    def delete_author(self, _id):
+    def remove_author(self, _id: int) -> bool:
+        """
+        Deletes author
+        :param _id: authors db id
+        :return: True if delete was success else False
+        """
         return self._dao.delete(_id)
+
+    def get_authors(self, offset: int, limit: int) -> list:
+        return self._dao.get_authors(offset, limit)

@@ -9,7 +9,26 @@ class AuthorDAO:
         sql = "select first_name, last_name, nationality from authors where id = ?"
         return self._db.fetchone(sql, (author_id,))
 
-    def create(self, author: Author):
+    def get_authors(self, offset: int, limit: int) -> list:
+        sql = """
+            select id, first_name, last_name, nationality
+            from authors 
+            order by id 
+            offset ? rows 
+            fetch next ? rows only
+        """
+
+        rows = self._db.fetch_all(sql, (offset, limit))
+
+        authors = []
+        for row in rows:
+            author = Author(*row)
+            authors.append(author)
+
+        return authors
+
+
+    def create(self, author: Author) -> bool:
         sql = """
             insert into authors (first_name, last_name, nationality)
             output inserted.id
@@ -29,12 +48,12 @@ class AuthorDAO:
             return True
         return False
 
-    def update(self, author: Author):
+    def update(self, author: Author) -> bool:
         sql = """
             update authors
             set first_name = ?, 
                 last_name = ?, 
-                nationality = ?, 
+                nationality = ?
             where id = ?
         """
         params = (
