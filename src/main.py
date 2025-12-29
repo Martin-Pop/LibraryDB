@@ -73,7 +73,7 @@ if __name__ == '__main__':
         # titles = title_service.get_titles(0,10)
         # print(titles)
 
-        copy_service = CopyService(db_manager)
+        # copy_service = CopyService(db_manager)
         #add
         # copy = copy_service.add_new_copy(2, 'HHHH23', 'A2', CopyStatus.AVAILABLE)
         # print(copy)
@@ -92,6 +92,9 @@ if __name__ == '__main__':
         #     print(copy)
         #
         # print(copies[0].status == CopyStatus.AVAILABLE)
+
+        #TODO: test loans
+        pass
 
     # except Exception as e:
     #     print(f"Err: {e}")
