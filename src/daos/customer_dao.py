@@ -24,20 +24,17 @@ class CustomerDAO:
 
         customers = []
         for row in rows:
-            print(row)
-            customer = Customer(
-                id=row[0],
-                code=row[1],
-                first_name=row[2],
-                last_name=row[3],
-                email=row[4],
-                is_active=row[5],
-                registered_on=row[6]
-            )
+            customer = Customer(*row)
             customers.append(customer)
 
         return customers
 
+    def get_by_id(self, customer_id: int) -> Customer | None:
+        sql = "select id, code, first_name, last_name, email, is_active, registration_date from customers where id = ?"
+        row = self._db.fetch_one(sql, (customer_id,))
+        if row:
+            return Customer(*row)
+        return None
 
     def create(self, customer: Customer) -> bool:
         sql = """

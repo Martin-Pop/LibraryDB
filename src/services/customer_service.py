@@ -1,5 +1,6 @@
 from src.daos.customer_dao import CustomerDAO
 from src.models.entities import Customer
+from src.utils import InvalidParameterException
 
 from datetime import datetime
 import string
@@ -20,7 +21,25 @@ class CustomerService:
         random_part = ''.join(random.choice(chars) for _ in range(8))
         return f"CUSTOMER-{random_part}"
 
-    def register_customer(self, first_name, last_name, email):
+    def _validate(self, first_name: str, last_name: str, email: str):
+        """
+        Validates customers parameters
+        :param first_name: first name - must be at least 2 characters long
+        :param last_name: last name - must be at least 2 characters long
+        :param email: email address - must contain @ and .
+        :raises InvalidParameterException: invalid parameters
+        """
+        if not first_name or len(first_name) < 2:
+            raise InvalidParameterException("Name must be at least 2 characters long")
+
+        if not last_name or len(last_name) < 2:
+            raise InvalidParameterException("Last name must be at least 2 characters long")
+
+        if not email or "@" not in email or "." not in email:
+            raise InvalidParameterException("Invalid email address.")
+
+
+    def register_customer(self, first_name: str, last_name: str, email: str) -> Customer:
         """
         Registers a new customer.
         :param first_name: customers first name
@@ -29,27 +48,11 @@ class CustomerService:
         :return: customer object
         """
 
-        if not isinstance(first_name, str):
-            raise TypeError(f"First name must be str got: {type(first_name).__name__}")
-
-        if not isinstance(last_name, str):
-            raise TypeError(f"Last name must be str got: {type(last_name).__name__}")
-
-        if not isinstance(email, str):
-            raise TypeError(f"Email must be str got: {type(email).__name__}")
-
         first_name = first_name.strip() if first_name else ""
         last_name = last_name.strip() if last_name else ""
         email = email.strip() if email else ""
 
-        if not first_name or len(first_name) < 2:
-            raise ValueError("Name must be at least 2 characters long")
-
-        if not last_name or len(last_name) < 2:
-            raise ValueError("Last name must be at least 2 characters long")
-
-        if not email or "@" not in email or "." not in email:
-            raise ValueError("Invalid email address.")
+        self._validate(first_name, last_name, email)
 
         while True:
             new_code = self._generate_customer_code()
@@ -57,18 +60,31 @@ class CustomerService:
             if not self._dao.does_code_exist(new_code):
                 break
 
-        customer = Customer(
-            id=0,
-            code=new_code,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            is_active=True,
-            registered_on=datetime.now()
-        )
+        customer = Customer(0, new_code, first_name, last_name, email, True, datetime.now())
 
         self._dao.create(customer)
         return customer
+
+    def update_customer(self, _id: int, first_name: str, last_name: str, email: str) -> bool:
+
+        customer = self._dao.get_by_id(_id)
+        if not customer:
+            return False
+
+        first_name = first_name.strip() if first_name else ""
+        last_name = last_name.strip() if last_name else ""
+        email = email.strip() if email else ""
+
+        self._validate(first_name, last_name, email)
+
+        customer.first_name = first_name
+        customer.last_name = last_name
+        customer.email = email
+
+        return self._dao.update(customer)
+
+    def remove_customer(self, customer_id: int) -> bool:
+        return self._dao.delete(customer_id)
 
     def get_customers(self, offset, limit):
         """

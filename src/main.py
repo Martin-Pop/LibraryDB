@@ -17,35 +17,23 @@ if __name__ == '__main__':
     try:
 
         customer_service = CustomerService(db_manager)
+        #add
+        # new_customer = customer_service.register_customer("Martin", "idk", "s@sss.com")
+        # print('New customer:' + repr(new_customer))
 
-        new_customer = Customer(
-            id=0,
-            code="CUST-1s",
-            first_name="j",
-            last_name="n",
-            email="j@n.com",
-            is_active=True,
-            registered_on=datetime.now()
-        )
+        #update
+        # success = customer_service.update_customer(4, "Martin", "Pp", "s@.com")
+        # print(success)
 
-        #test
-        try:
-            pass
-            # is_success = customer_dao.create(new_customer)
-            #
-            # if is_success:
-            #     print("Success.")
-            # else:
-            #     print("No change")
-            # print(cust)
+        # select with offset, limit
+        # cust = customer_service.get_customers(0,10)
+        # print(cust)
 
-            # newcust = customer_service.register_customer("Hhh", "idk", "s@sss.com")
-            # cust = customer_service.get_customers(5,10)
+        #remove
+        # success = customer_service.remove_customer(3)
+        # print(f"Removed customer: {success}")
 
-        except Exception as e:
-            print(f"Error: {e}")
-
-    # except Exception as e:
-    #     print(f"Err: {e}")
+    except Exception as e:
+        print(f"Err: {e}")
     finally:
         print('closing')
