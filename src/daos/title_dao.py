@@ -1,9 +1,24 @@
 from src.models.entities import Title, Author
+from src.utils import InvalidParameterException
 
 
 class TitleDAO:
     def __init__(self, db):
         self._db = db
+
+    def get_by_id(self, title_id: int) -> Title | None:
+        sql = """
+            select authors.id, authors.first_name, authors.last_name, authors.nationality,
+            titles.title, titles.isbn, titles.page_count, titles.price, titles.description
+            from titles join authors on titles.author_id = authors.id
+            where titles.id = ?
+        """
+        row = self._db.fetch_one(sql, (title_id,))
+        if not row:
+            raise InvalidParameterException("Title not found")
+
+        author = Author(*row[:4])
+        return Title(title_id, author,*row[4:])
 
     def get_titles(self, offset: int, limit: int) -> list:
 

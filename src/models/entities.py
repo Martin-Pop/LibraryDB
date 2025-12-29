@@ -3,9 +3,9 @@ from enum import Enum
 from datetime import datetime
 
 class CopyStatus(Enum):
-    AVAILABLE = 'available',
-    ON_LOAN = 'on_loan',
-    LOST = 'lost',
+    AVAILABLE = 'available'
+    ON_LOAN = 'on_loan'
+    LOST = 'lost'
     DISCARDED = 'discarded'
 
 @dataclass
@@ -30,7 +30,7 @@ class Copy:
     id: int
     title: Title
     code: str
-    location: str
+    location: str | None
     status: CopyStatus
 
 @dataclass

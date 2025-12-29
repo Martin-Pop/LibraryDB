@@ -1,6 +1,7 @@
 from src.database_access.config_loader import ConfigLoader
 from src.database_access.database_connection import DatabaseConnectionManager
-from src.models.entities import Customer
+from src.models.entities import Customer, CopyStatus
+from src.services.copy_service import CopyService
 
 from src.services.customer_service import CustomerService
 from src.services.author_service import AuthorService
@@ -55,7 +56,7 @@ if __name__ == '__main__':
         # auths = author_service.get_authors(0,10)
         # print(auths)
 
-        title_service = TitleService(db_manager)
+        # title_service = TitleService(db_manager)
         #add
         # new_title = title_service.add_new_title(2,"se", None, 5, 99.50, None)
         # print('created' + repr(new_title))
@@ -71,6 +72,26 @@ if __name__ == '__main__':
         #select
         # titles = title_service.get_titles(0,10)
         # print(titles)
+
+        copy_service = CopyService(db_manager)
+        #add
+        # copy = copy_service.add_new_copy(2, 'HHHH23', 'A2', CopyStatus.AVAILABLE)
+        # print(copy)
+
+        #update
+        # success = copy_service.update_copy(5, 2, 'wow', 'A3', CopyStatus.LOST)
+        # print(success)
+
+        #delete
+        # success = copy_service.remove_copy(1)
+        # print(success)
+
+        #select
+        # copies = copy_service.get_copies(offset=0, limit=100)
+        # for copy in copies:
+        #     print(copy)
+        #
+        # print(copies[0].status == CopyStatus.AVAILABLE)
 
     # except Exception as e:
     #     print(f"Err: {e}")
