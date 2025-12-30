@@ -2,14 +2,11 @@ from src.models.entities import Loan, Customer, Copy, Title, Author, CopyStatus
 
 
 class LoanDAO:
-    def __init__(self, db_manager):
-        self._db = db_manager
 
-    def get_loans(self, offset: int, limit: int) -> list:
-        sql = """
+    select = """
             select 
                 l.id, l.loan_date, l.return_date,
-                c.id, c.code, c.first_name, c.last_name, c.email, c.is_active, c.registered_on,
+                c.id, c.code, c.first_name, c.last_name, c.email, c.is_active, c.registration_date,
                 cp.id, cp.code, cp.location, cp.status,
                 t.id, t.title, t.isbn, t.page_count, t.price, t.description,
                 a.id, a.first_name, a.last_name, a.nationality
@@ -18,9 +15,45 @@ class LoanDAO:
             join copies cp on l.copy_id = cp.id
             join titles t on cp.title_id = t.id
             join authors a on t.author_id = a.id
-            order by l.id
-            offset ? rows fetch next ? rows only
         """
+
+    # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-23)
+
+    def __init__(self, db_manager):
+        self._db = db_manager
+
+    def get_loan_by_codes(self, customer_code: str, copy_code: str):
+        sql = self.select + "where c.code = ? and cp.code = ?"
+        row = self._db.fetch_one(sql, (customer_code, copy_code))
+
+        if not row:
+            return None
+
+        author = Author(*row[20:])
+        title = Title(row[14], author, *row[15:20])
+        copy = Copy(row[10], title, row[11], row[12], CopyStatus(row[13]))
+        customer = Customer(*row[3:10])
+
+        return Loan(row[0], customer, copy, row[1], row[2])
+
+
+    def get_by_id(self, loan_id: int) -> Loan | None:
+        sql = self.select + "where l.id = ?"
+        row = self._db.fetch_one(sql, (loan_id,))
+
+        if not row:
+            return None
+
+        author = Author(*row[20:])
+        title = Title(row[14], author, *row[15:20])
+        copy = Copy(row[10], title, row[11], row[12], CopyStatus(row[13]))
+        customer = Customer(*row[3:10])
+
+        return Loan(row[0], customer, copy, row[1], row[2])
+
+
+    def get_loans(self, offset: int, limit: int) -> list:
+        sql = self.select + "order by l.id offset ? rows fetch next ? rows only"
 
         # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-23)
 

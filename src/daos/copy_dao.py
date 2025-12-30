@@ -27,6 +27,28 @@ class CopyDAO:
 
         return Copy(row[0], title, row[1], row[2], CopyStatus(row[3]))
 
+    def get_by_code(self, copy_code):
+        sql = """
+            select 
+                c.id, c.code, c.location, c.status,
+                t.id, t.title, t.isbn, t.page_count, t.price, t.description,
+                a.id, a.first_name, a.last_name, a.nationality
+            from copies c
+            join titles t on c.title_id = t.id
+            join authors a on t.author_id = a.id
+            where c.code = ?
+        """
+
+        row = self._db.fetch_one(sql, (copy_code,))
+
+        if not row:
+            return None
+
+        author = Author(*row[10:])
+        title = Title(row[4], author, *row[5:10])
+
+        return Copy(row[0], title, row[1], row[2], CopyStatus(row[3]))
+
     def get_copies(self, offset: int, limit: int) -> list:
         sql = """
                 select 

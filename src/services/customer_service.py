@@ -19,7 +19,7 @@ class CustomerService:
         """
         chars = string.ascii_uppercase + string.digits
         random_part = ''.join(random.choice(chars) for _ in range(8))
-        return f"CUSTOMER-{random_part}"
+        return random_part
 
     def _validate(self, first_name: str, last_name: str, email: str):
         """

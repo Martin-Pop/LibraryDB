@@ -5,6 +5,7 @@ from src.services.copy_service import CopyService
 
 from src.services.customer_service import CustomerService
 from src.services.author_service import AuthorService
+from src.services.loan_service import LoanService
 from src.services.title_service import TitleService
 
 from datetime import datetime
@@ -22,9 +23,9 @@ if __name__ == '__main__':
 
     try:
 
-        #customer_service = CustomerService(db_manager)
+        # customer_service = CustomerService(db_manager)
         #add
-        # new_customer = customer_service.register_customer("Martin", "idk", "s@sss.com")
+        # new_customer = customer_service.register_customer("Yee", "Hoo", "yah@yahoo.com")
         # print('New customer:' + repr(new_customer))
 
         #update
@@ -73,13 +74,13 @@ if __name__ == '__main__':
         # titles = title_service.get_titles(0,10)
         # print(titles)
 
-        # copy_service = CopyService(db_manager)
+        copy_service = CopyService(db_manager)
         #add
         # copy = copy_service.add_new_copy(2, 'HHHH23', 'A2', CopyStatus.AVAILABLE)
         # print(copy)
 
         #update
-        # success = copy_service.update_copy(5, 2, 'wow', 'A3', CopyStatus.LOST)
+        # success = copy_service.update_copy(5, 2, 'wow', 'A3', CopyStatus.AVAILABLE)
         # print(success)
 
         #delete
@@ -93,8 +94,14 @@ if __name__ == '__main__':
         #
         # print(copies[0].status == CopyStatus.AVAILABLE)
 
-        #TODO: test loans
-        pass
+        loan_service = LoanService(db_manager)
+
+        # new_loan = loan_service.create_loan("78QDNE27",'wow')
+        # print(new_loan)
+        # suc = loan_service.close_loan("78QDNE27",'wow', CopyStatus.AVAILABLE)
+        # print(suc)
+
+
 
     # except Exception as e:
     #     print(f"Err: {e}")

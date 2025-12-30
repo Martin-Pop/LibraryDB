@@ -36,6 +36,13 @@ class CustomerDAO:
             return Customer(*row)
         return None
 
+    def get_by_code(self, customer_code: str) -> Customer | None:
+        sql = "select id, code, first_name, last_name, email, is_active, registration_date from customers where code = ?"
+        row = self._db.fetch_one(sql, (customer_code,))
+        if row:
+            return Customer(*row)
+        return None
+
     def create(self, customer: Customer) -> bool:
         sql = """
             insert into customers (code, first_name, last_name, email, is_active, registration_date)
