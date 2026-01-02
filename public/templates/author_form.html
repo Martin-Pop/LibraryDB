@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-wrapper">
+    <h2>{{title}}</h2>
+
+    <form method="POST" action="">
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-input"
+                   value="{{ author.name if author else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="nat">Nationality</label>
+            <input type="text" id="nat" name="nationality" class="form-input"
+                   value="{{ author.nationality if author and author.nationality else '' }}">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-save">Save</button>
+            <a href="{{ url_for('authors.list_authors') }}" class="btn btn-back">Back</a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

@@ -38,7 +38,7 @@ class AuthorDAO:
         sql = """
             insert into authors (name, nationality)
             output inserted.id
-            values (?, ?, ?);
+            values (?, ?);
         """
 
         params = (

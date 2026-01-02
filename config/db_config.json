@@ -1,8 +1,8 @@
 {
     "driver": "ODBC Driver 17 for SQL Server",
     "server": "localhost",
-    "database": "test",
+    "database": "my_library",
     "port": 1433,
-    "uid": "user1test",
-    "pwd": "user1pass"
+    "uid": "library_user",
+    "pwd": "pass123"
 }
