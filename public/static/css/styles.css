@@ -101,7 +101,7 @@ body {
 }
 
 .data-table th, .data-table td {
-    padding: 12px 15px;
+    padding: 5px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -112,6 +112,13 @@ body {
     color: #333;
 }
 
+.data-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
 .data-table tbody tr:nth-of-type(even) {
     background-color: #f9f9f9;
 }
@@ -120,14 +127,15 @@ body {
     background-color: #f1f1f1;
 }
 
-.actions-cell {
-    white-space: nowrap;
+.actions-cell{
+    display: flex;
+    flex-direction: row;
 }
 
 /* BUTTONS */
 .btn {
     display: inline-block;
-    padding: 8px 12px;
+    padding: 4px 8px;
     text-decoration: none;
     border-radius: 4px;
     font-size: 0.9rem;
@@ -195,4 +203,81 @@ body {
     pointer-events: none;
     background-color: #fff;
     border-color: #ddd;
+}
+
+/*FORM*/
+.form-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.form-wrapper h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.form-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+/* FORM BTNS */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-save {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    flex: 1;
+}
+.btn-save:hover {
+    background-color: #218838;
+}
+
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+.btn-back:hover {
+    background-color: #5a6268;
 }

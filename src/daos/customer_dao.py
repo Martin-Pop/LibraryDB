@@ -4,7 +4,7 @@ class CustomerDAO:
     def __init__(self, db_manager):
         self._db = db_manager
 
-    def get_customers(self, offset: int, limit: int) -> list:
+    def get_customers(self, offset: int, limit: int | None) -> list:
         """
         Retrieves list of customers.
         :param offset: Number of rows to skip.
@@ -16,11 +16,14 @@ class CustomerDAO:
             select id, code, first_name, last_name, email, is_active, registration_date 
             from customers 
             order by id 
-            offset ? rows 
-            fetch next ? rows only
+            offset ? rows
         """
 
-        rows = self._db.fetch_all(sql, (offset, limit))
+        if limit is not None:
+            sql += " fetch next ? rows only"
+            rows = self._db.fetch_all(sql, (offset, limit))
+        else:
+            rows = self._db.fetch_all(sql, (offset,))
 
         customers = []
         for row in rows:

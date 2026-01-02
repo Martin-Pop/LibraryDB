@@ -35,7 +35,7 @@ class TitleService:
         if errors:
             raise InvalidParameterException(errors)
 
-    def add_new_title(self, author_id: int, title: str, isbn: str | None, page_count: int | None, price: float, description: str | None) -> Title | None:
+    def add_new_title(self, author_name: str, title: str, isbn: str | None, page_count: int | None, price: float, description: str | None) -> Title | None:
 
         title = title.strip() if title else ""
         isbn = isbn.strip() if isbn else None
@@ -43,7 +43,7 @@ class TitleService:
 
         self._validate(title, isbn, page_count, price)
 
-        author = self._author_dao.get_by_id(author_id)
+        author = self._author_dao.get_by_name(author_name)
         if not author:
             raise InvalidParameterException("Author not found")
 
@@ -52,7 +52,7 @@ class TitleService:
             return book
         return None
 
-    def update_title(self, title_id: int, author_id: int, title: str, isbn: str | None, page_count: int | None, price: float, description: str | None) -> bool:
+    def update_title(self, title_id: int, author_name: str, title: str, isbn: str | None, page_count: int | None, price: float, description: str | None) -> bool:
 
         title = title.strip() if title else ""
         isbn = isbn.strip() if isbn else None
@@ -60,7 +60,7 @@ class TitleService:
 
         self._validate(title, isbn, page_count, price)
 
-        author = self._author_dao.get_by_id(author_id)
+        author = self._author_dao.get_by_name(author_name)
         if not author:
             raise InvalidParameterException("Author not found")
 
@@ -72,3 +72,6 @@ class TitleService:
 
     def get_titles(self, offset: int, limit: int) -> list:
         return self._title_dao.get_titles(offset, limit)
+
+    def get_by_id(self, title_id: int) -> Title | None:
+        return self._title_dao.get_by_id(title_id)

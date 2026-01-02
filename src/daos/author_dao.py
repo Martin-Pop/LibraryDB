@@ -15,16 +15,27 @@ class AuthorDAO:
 
         return Author(author_id, *row)
 
-    def get_authors(self, offset: int, limit: int) -> list:
+    def get_by_name(self, name: str) -> Author | None:
+        sql = "select id, nationality from authors where name = ?"
+        row = self._db.fetch_one(sql, (name,))
+        if not row:
+            return None
+
+        return Author(row[0], name, row[1])
+
+    def get_authors(self, offset: int, limit: int | None) -> list:
         sql = """
             select id, name, nationality
             from authors 
             order by id 
-            offset ? rows 
-            fetch next ? rows only
+            offset ? rows
         """
 
-        rows = self._db.fetch_all(sql, (offset, limit))
+        if limit is not None:
+            sql += " fetch next ? rows only"
+            rows = self._db.fetch_all(sql, (offset, limit))
+        else:
+            rows = self._db.fetch_all(sql, (offset,))
 
         authors = []
         for row in rows:

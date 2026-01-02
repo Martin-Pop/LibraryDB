@@ -4,9 +4,7 @@
 
 <div class="list-header">
     <h1>{{ title }}</h1>
-    <a href="{{ url_for(entity_name + '.create') }}" class="btn btn-add">
-        + New Record
-    </a>
+    <a href="{{ url_for(entity_name + '.create') }}" class="btn btn-add">Add</a>
 </div>
 
 <table class="data-table">
@@ -21,7 +19,7 @@
         {% for row in rows %}
         <tr>
             {% for cell in row.data_values %}
-                <td>{{ cell }}</td>
+                <td>{{ cell if cell is not none else 'Unknown' }}</td>
             {% endfor %}
 
             <td class="actions-cell">

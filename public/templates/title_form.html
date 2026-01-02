@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-wrapper">
+    <h2>{{ title }}</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Title Name</label>
+            <input type="text" name="title" class="form-input"
+                   value="{{ item.title if item else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Author Name</label>
+            <input type="text" name="author_name" class="form-input" value="{{ item.author_name if item else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>ISBN</label>
+            <input type="text" name="isbn" class="form-input" value="{{ item.isbn if item else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Page count</label>
+            <input type="number" name="page_count" class="form-input" value="{{ item.page_count if item else '' }}" min="1">
+        </div>
+
+         <div class="form-group">
+            <label>Price</label>
+            <input type="number" name="price" class="form-input" value="{{ item.price if item else '' }}" min="1" step="0.01" required>
+        </div>
+
+         <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" class="form-input">{{ item.description if item else '' }}</textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-save">Save</button>
+            <a href="{{ url_for('titles.list_titles') }}" class="btn btn-back">Back</a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

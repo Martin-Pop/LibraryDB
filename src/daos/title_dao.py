@@ -15,7 +15,7 @@ class TitleDAO:
         """
         row = self._db.fetch_one(sql, (title_id,))
         if not row:
-            raise InvalidParameterException("Title not found")
+            return None
 
         author = Author(*row[:3])
         return Title(title_id, author,*row[3:])

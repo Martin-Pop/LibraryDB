@@ -58,7 +58,7 @@ class AuthorService:
         """
         return self._dao.delete(_id)
 
-    def get_authors(self, offset: int, limit: int) -> list:
+    def get_authors(self, offset: int, limit: int | None) -> list:
         return self._dao.get_authors(offset, limit)
 
     def get_by_id(self, author_id: int) -> Author:

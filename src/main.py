@@ -14,6 +14,7 @@ import os
 from flask import Flask
 from src.controllers.author_controller import authors_bp
 from src.controllers.customer_controller import customer_bp
+from src.controllers.title_controller import title_bp
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 template_dir = os.path.join(base_dir, 'public', 'templates')
@@ -26,6 +27,7 @@ app = Flask(__name__,
 app.secret_key = 'hello_world'
 app.register_blueprint(authors_bp)
 app.register_blueprint(customer_bp)
+app.register_blueprint(title_bp)
 
 @app.route('/')
 def index():
