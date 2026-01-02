@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-wrapper">
+    <h2>{{ title }}</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Title Name</label>
+            <input type="text" name="title" class="form-input" value="{{ copy.title if copy else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Code</label>
+            <input type="text" name="code" class="form-input" value="{{ copy.code if copy else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" name="location" class="form-input" value="{{ copy.location if copy else '' }}">
+        </div>
+
+        <select name="status" class="form-input">
+            {% for s in statuses %}
+                <option value="{{ s.value }}"
+                    {% if copy and copy.status == s.value %}selected{% endif %}>
+                    {{ s.value }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-save">Save</button>
+            <a href="{{ url_for('copies.list_copies') }}" class="btn btn-back">Back</a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

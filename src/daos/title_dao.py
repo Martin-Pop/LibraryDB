@@ -20,6 +20,20 @@ class TitleDAO:
         author = Author(*row[:3])
         return Title(title_id, author,*row[3:])
 
+    def get_by_title(self, title: str) -> Title | None:
+        sql = """
+            select authors.id, authors.name, authors.nationality,
+            titles.id, titles.isbn, titles.page_count, titles.price, titles.description
+            from titles join authors on titles.author_id = authors.id
+            where titles.title = ?
+        """
+        row = self._db.fetch_one(sql, (title,))
+        if not row:
+            return None
+
+        author = Author(*row[:3])
+        return Title(row[3], author, title, *row[4:])
+
     def get_titles(self, offset: int, limit: int) -> list:
 
         sql = """
