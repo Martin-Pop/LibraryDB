@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.service_container import title_service, author_service
+from src.utils import parse_db_exception
 
 title_bp = Blueprint('titles', __name__, url_prefix='/titles')
 
@@ -44,7 +45,7 @@ def delete(id):
         else:
             flash('Error while deleting.', 'error')
     except Exception as e:
-        flash(str(e), 'error')
+        flash('Error deleting title: ' + parse_db_exception(e), 'error')
 
     return redirect(url_for('titles.list_titles'))
 
@@ -73,7 +74,7 @@ def create():
             return redirect(url_for('titles.list_titles'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error creating title: ' + parse_db_exception(e), 'error')
             title_data = {
                 'title': title,
                 'isbn': isbn if isbn else '',
@@ -118,7 +119,7 @@ def edit(id):
             return redirect(url_for('titles.list_titles'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error editing title: ' + parse_db_exception(e), 'error')
 
     title_data = {
         'title': title_obj.title,

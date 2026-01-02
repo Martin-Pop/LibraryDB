@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="error-container">
+    <h1 style="font-size: 3rem;">⚠️</h1>
+    <h2>Can not establish connection with database</h2>
+    <p>Please check database configuration file or connection along the way.</p>
+    <p>Error message:</p>
+    <p>{{error}}</p>
+</div>
+{% endblock %}

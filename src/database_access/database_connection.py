@@ -1,5 +1,5 @@
 import pyodbc
-
+from src.utils import DatabaseConnectionException
 
 class DatabaseConnectionManager:
     _instance = None
@@ -21,12 +21,12 @@ class DatabaseConnectionManager:
 
         if self._connection is None: #lazy
             if self._connection_string is None:
-                raise Exception("Can not connect, connection string doesnt exist.")
+                raise DatabaseConnectionException("Can not connect, connection string doesnt exist.")
 
             try:
                 self._connection = pyodbc.connect(self._connection_string)
             except pyodbc.Error as ex:
-                raise Exception(f"Error connecting to db: {ex}")
+                raise DatabaseConnectionException(f"Error connecting to db: {ex}")
 
     def get_connection(self):
         self._establish_connection()
@@ -42,6 +42,8 @@ class DatabaseConnectionManager:
                 cursor.execute(query)
             results = cursor.fetchall()
             return results
+        except pyodbc.Error as ex:
+            raise DatabaseConnectionException(f"Error connecting to db: {ex}")
         finally:
             cursor.close()
 
@@ -55,6 +57,8 @@ class DatabaseConnectionManager:
                 cursor.execute(query)
             result = cursor.fetchone()
             return result
+        except pyodbc.Error as ex:
+            raise DatabaseConnectionException(f"Error connecting to db: {ex}")
         finally:
             cursor.close()
 
@@ -73,9 +77,9 @@ class DatabaseConnectionManager:
                 self._connection.commit()
 
             return rows_affected
-        except pyodbc.Error:
+        except pyodbc.Error as ex:
             self._connection.rollback()
-            raise
+            raise DatabaseConnectionException(f"Error connecting to db: {ex}")
         finally:
             cursor.close()
 
@@ -102,9 +106,9 @@ class DatabaseConnectionManager:
 
             self._connection.commit()
             return out
-        except pyodbc.Error:
+        except pyodbc.Error as ex:
             self._connection.rollback()
-            raise
+            raise DatabaseConnectionException(f"Error connecting to db: {ex}")
         finally:
             cursor.close()
 

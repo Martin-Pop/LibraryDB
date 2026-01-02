@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.service_container import customer_service
+from src.utils import parse_db_exception
 
 customer_bp = Blueprint('customers', __name__, url_prefix='/customers')
 
@@ -45,7 +46,7 @@ def delete(id):
         else:
             flash('Error while deleting.', 'error')
     except Exception as e:
-        flash(str(e), 'error')
+        flash('Error deleting customer: ' + parse_db_exception(e), 'error')
 
     return redirect(url_for('customers.list_customers'))
 
@@ -68,7 +69,7 @@ def create():
             return redirect(url_for('customers.list_customers'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error creating customer: ' + parse_db_exception(e), 'error')
             customer = {'first_name' : first_name, 'last_name': last_name, "email":email}
             return render_template('customer_form.html', title="Create Customer", customer=customer)
 
@@ -98,6 +99,6 @@ def edit(id):
             return redirect(url_for('customers.list_customers'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error editing customer: ' + parse_db_exception(e), 'error')
 
     return render_template('customer_form.html', title="Edit Customer", customer=customer)

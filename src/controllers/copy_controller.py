@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.service_container import copy_service
 from src.models.entities import CopyStatus
+from src.utils import parse_db_exception
 
 copy_bp = Blueprint('copies', __name__, url_prefix='/copies')
 
@@ -45,7 +46,7 @@ def delete(id):
         else:
             flash('Error while deleting.', 'error')
     except Exception as e:
-        flash(str(e), 'error')
+        flash('Error deleting copy: '+ parse_db_exception(e), 'error')
 
     return redirect(url_for('customers.list_customers'))
 
@@ -70,7 +71,7 @@ def create():
             return redirect(url_for('copies.list_copies'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error creating new copy: ' + parse_db_exception(e), 'error')
             copy = {'title': title, 'code': code, 'location': location, 'status': status}
             return render_template('copy_form.html', title="Create Copy", copy=copy, statuses=CopyStatus)
 
@@ -102,7 +103,7 @@ def edit(id):
             return redirect(url_for('copies.list_copies'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error updating copy: ' + parse_db_exception(e), 'error')
 
     copy_values = {
         'title': copy.title.title,

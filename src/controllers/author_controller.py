@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 from src.service_container import author_service
+from src.utils import parse_db_exception
 
 authors_bp = Blueprint('authors', __name__, url_prefix='/authors')
 
@@ -43,7 +44,7 @@ def delete(id):
         else:
             flash('Error while deleting.', 'error')
     except Exception as e:
-        flash(str(e), 'error')
+        flash('Error deleting author: ' + parse_db_exception(e), 'error')
 
     return redirect(url_for('authors.list_authors'))
 
@@ -62,7 +63,7 @@ def create():
             return redirect(url_for('authors.list_authors'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error creating author: ' + parse_db_exception(e), 'error')
             author = {'name' : name, 'nationality': nationality}
             return render_template('author_form.html', title="Create Author", author=author)
 
@@ -92,6 +93,6 @@ def edit(id):
             return redirect(url_for('authors.list_authors'))
 
         except Exception as e:
-            flash(str(e), 'error')
+            flash('Error updating author: ' + parse_db_exception(e), 'error')
 
     return render_template('author_form.html', title="Edit Author", author=author)
