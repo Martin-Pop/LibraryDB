@@ -95,3 +95,6 @@ class CustomerService:
         :return: list of customers
         """
         return self._dao.get_customers(offset, limit)
+
+    def get_by_id(self, _id: int) -> Customer:
+        return self._dao.get_by_id(_id)

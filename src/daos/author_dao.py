@@ -7,11 +7,11 @@ class AuthorDAO:
     def __init__(self, db_manager):
         self._db = db_manager
 
-    def get_by_id(self, author_id: int) -> Author:
+    def get_by_id(self, author_id: int) -> Author | None:
         sql = "select name, nationality from authors where id = ?"
         row = self._db.fetch_one(sql, (author_id,))
         if not row:
-            raise InvalidParameterException("Author not found")
+            return None
 
         return Author(author_id, *row)
 

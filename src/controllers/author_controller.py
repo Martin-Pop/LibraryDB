@@ -73,10 +73,9 @@ def create():
 @authors_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
 
-    try:
-        author = author_service.get_by_id(id)
-    except Exception as e:
-        flash(str(e), 'error')
+    author = author_service.get_by_id(id)
+    if not author:
+        flash('Author was not found', 'error')
         return redirect(url_for('authors.list_authors'))
 
     if request.method == 'POST':
