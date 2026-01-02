@@ -8,7 +8,7 @@ class AuthorDAO:
         self._db = db_manager
 
     def get_by_id(self, author_id: int) -> Author:
-        sql = "select first_name, last_name, nationality from authors where id = ?"
+        sql = "select name, nationality from authors where id = ?"
         row = self._db.fetch_one(sql, (author_id,))
         if not row:
             raise InvalidParameterException("Author not found")
@@ -17,7 +17,7 @@ class AuthorDAO:
 
     def get_authors(self, offset: int, limit: int) -> list:
         sql = """
-            select id, first_name, last_name, nationality
+            select id, name, nationality
             from authors 
             order by id 
             offset ? rows 
@@ -36,15 +36,14 @@ class AuthorDAO:
 
     def create(self, author: Author) -> bool:
         sql = """
-            insert into authors (first_name, last_name, nationality)
+            insert into authors (name, nationality)
             output inserted.id
             values (?, ?, ?);
         """
 
         params = (
-            author.first_name,
-            author.last_name,
-            author.nationality,
+            author.name,
+            author.nationality
         )
 
         out = self._db.execute_get_output(sql, params)
@@ -57,16 +56,14 @@ class AuthorDAO:
     def update(self, author: Author) -> bool:
         sql = """
             update authors
-            set first_name = ?, 
-                last_name = ?, 
+            set name = ?, 
                 nationality = ?
             where id = ?
         """
         params = (
-            author.first_name,
-            author.last_name,
+            author.name,
             author.nationality,
-            author.id,
+            author.id
         )
 
         rows_affected = self._db.execute(sql, params)

@@ -16,8 +16,7 @@ create table customers (
 -- authors
 create table authors (
     id int primary key identity(1,1),
-    first_name varchar(100) not null,
-    last_name varchar(100) not null,
+    name varchar(100) not null,
     nationality varchar(50)
 );
 

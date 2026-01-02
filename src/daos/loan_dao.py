@@ -9,7 +9,7 @@ class LoanDAO:
                 c.id, c.code, c.first_name, c.last_name, c.email, c.is_active, c.registration_date,
                 cp.id, cp.code, cp.location, cp.status,
                 t.id, t.title, t.isbn, t.page_count, t.price, t.description,
-                a.id, a.first_name, a.last_name, a.nationality
+                a.id, a.name, a.nationality
             from loans l
             join customers c on l.customer_id = c.id
             join copies cp on l.copy_id = cp.id
@@ -17,7 +17,7 @@ class LoanDAO:
             join authors a on t.author_id = a.id
         """
 
-    # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-23)
+    # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-22)
 
     def __init__(self, db_manager):
         self._db = db_manager
@@ -55,7 +55,7 @@ class LoanDAO:
     def get_loans(self, offset: int, limit: int) -> list:
         sql = self.select + "order by l.id offset ? rows fetch next ? rows only"
 
-        # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-23)
+        # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-22)
 
         rows = self._db.fetch_all(sql, (offset, limit))
 

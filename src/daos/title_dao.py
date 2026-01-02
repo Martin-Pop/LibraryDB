@@ -8,7 +8,7 @@ class TitleDAO:
 
     def get_by_id(self, title_id: int) -> Title | None:
         sql = """
-            select authors.id, authors.first_name, authors.last_name, authors.nationality,
+            select authors.id, authors.name, authors.nationality,
             titles.title, titles.isbn, titles.page_count, titles.price, titles.description
             from titles join authors on titles.author_id = authors.id
             where titles.id = ?
@@ -17,13 +17,13 @@ class TitleDAO:
         if not row:
             raise InvalidParameterException("Title not found")
 
-        author = Author(*row[:4])
-        return Title(title_id, author,*row[4:])
+        author = Author(*row[:3])
+        return Title(title_id, author,*row[3:])
 
     def get_titles(self, offset: int, limit: int) -> list:
 
         sql = """
-            select titles.id, authors.id, authors.first_name, authors.last_name, authors.nationality, 
+            select titles.id, authors.id, authors.name, authors.nationality, 
             titles.title, titles.isbn, titles.page_count, titles.price, titles.description
             from titles join authors on titles.author_id = authors.id
             order by titles.id 
@@ -35,8 +35,8 @@ class TitleDAO:
 
         titles = []
         for row in rows:
-            author = Author(row[1], row[2], row[3], row[4])
-            title = Title(row[0], author, row[5], row[6], row[7], row[8], row[9])
+            author = Author(row[1], row[2], row[3])
+            title = Title(row[0], author, row[4], row[5], row[6], row[7], row[8])
             titles.append(title)
 
         return titles

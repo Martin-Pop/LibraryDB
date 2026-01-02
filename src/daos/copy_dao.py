@@ -10,7 +10,7 @@ class CopyDAO:
             select 
                 c.id, c.code, c.location, c.status,
                 t.id, t.title, t.isbn, t.page_count, t.price, t.description,
-                a.id, a.first_name, a.last_name, a.nationality
+                a.id, a.name, a.nationality
             from copies c
             join titles t on c.title_id = t.id
             join authors a on t.author_id = a.id
@@ -32,7 +32,7 @@ class CopyDAO:
             select 
                 c.id, c.code, c.location, c.status,
                 t.id, t.title, t.isbn, t.page_count, t.price, t.description,
-                a.id, a.first_name, a.last_name, a.nationality
+                a.id, a.name, a.nationality
             from copies c
             join titles t on c.title_id = t.id
             join authors a on t.author_id = a.id
@@ -54,7 +54,7 @@ class CopyDAO:
                 select 
                     c.id, c.code, c.location, c.status,
                     t.id, t.title, t.isbn, t.page_count, t.price, t.description,
-                    a.id, a.first_name, a.last_name, a.nationality
+                    a.id, a.name, a.nationality
                 from copies c
                 join titles t on c.title_id = t.id
                 join authors a on t.author_id = a.id
@@ -62,7 +62,7 @@ class CopyDAO:
                 offset ? rows fetch next ? rows only
             """
 
-        # copy - 0-3, title - 4-9, author - 10-13
+        # copy - 0-3, title - 4-9, author - 10-12
 
         rows = self._db.fetch_all(sql, (offset, limit))
 

@@ -11,8 +11,7 @@ class CopyStatus(Enum):
 @dataclass
 class Author:
     id: int
-    first_name: str
-    last_name: str
+    name: str
     nationality: str | None
 
 @dataclass
