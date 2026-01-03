@@ -18,4 +18,4 @@ def parse_db_exception(exception):
     elif 'REFERENCE' in msg:
         return "please remove all references before proceeding"
     else:
-        return "unknow error"
+        return msg

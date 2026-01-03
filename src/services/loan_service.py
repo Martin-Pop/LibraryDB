@@ -102,3 +102,6 @@ class LoanService:
 
     def get_loans(self, offset: int, limit: int) -> list:
         return self._loan_dao.get_loans(offset, limit)
+
+    def get_by_id(self, loan_id: int) -> Loan | None:
+        return self._loan_dao.get_by_id(loan_id)

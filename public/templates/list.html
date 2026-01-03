@@ -7,6 +7,7 @@
     <a href="{{ url_for(entity_name + '.create') }}" class="btn btn-add">Add</a>
 </div>
 
+<div class="table-responsive">
 <table class="data-table">
     <thead>
         <tr>
@@ -25,6 +26,10 @@
             <td class="actions-cell">
                 <a href="{{ url_for(entity_name + '.edit', id=row.id) }}" class="btn btn-edit">Edit</a>
 
+                {% if entity_name == 'loans' %}
+                    <a href="{{ url_for('loans.edit', id=row.id, action='return') }}" class="btn {{ 'btn-return' if row.can_return else 'btn-disabled' }}">close loan</a>
+                {% endif %}
+
                 <form action="{{ url_for(entity_name + '.delete', id=row.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
                     <button type="submit" class="btn btn-delete">Delete</button>
                 </form>
@@ -33,7 +38,7 @@
         {% endfor %}
     </tbody>
 </table>
-
+</div>
 <nav class="page-nav">
   <ul class="page-list">
 

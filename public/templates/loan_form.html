@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-wrapper">
+    <h2>{{ title }}</h2>
+
+    <form method="POST"
+    {% if closing %}
+          action="{{ url_for('loans.close', id=loan.id) }}"
+    {% endif %}
+    >
+
+        <div class="form-group">
+            <label>Customer code</label>
+            <input type="text" name="customer" class="form-input" value="{{ loan.customer if loan else '' }}" required
+                {% if closing %}readonly{% endif %}>
+        </div>
+
+        <div class="form-group">
+            <label>Copy code</label>
+            <input type="text" name="copy_code" class="form-input" value="{{ loan.copy_code if loan else '' }}" required
+                   {% if loan or closing %}readonly{% endif %}>
+        </div>
+
+        {% if closing %}
+            <div class="form-group">
+                <label>Book status</label>
+                <select name="status" class="form-input">
+                    {% for s in statuses %}
+                        <option value="{{ s }}">
+                            {{ s }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-save">Save</button>
+            <a href="{{ url_for('loans.list_loans') }}" class="btn btn-back">Back</a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

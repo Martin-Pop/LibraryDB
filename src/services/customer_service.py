@@ -96,5 +96,8 @@ class CustomerService:
         """
         return self._dao.get_customers(offset, limit)
 
-    def get_by_id(self, _id: int) -> Customer:
+    def get_by_id(self, _id: int) -> Customer | None:
         return self._dao.get_by_id(_id)
+
+    def get_by_code(self, code: str) -> Customer | None:
+        return self._dao.get_by_code(code)

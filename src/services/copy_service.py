@@ -42,3 +42,6 @@ class CopyService:
 
     def get_by_id(self, copy_id: int) -> Copy | None:
         return self._copy_dao.get_by_id(copy_id)
+
+    def get_by_code(self, code: str) -> Copy | None:
+        return self._copy_dao.get_by_code(code)
