@@ -106,3 +106,11 @@ class TitleDAO:
         sql = "delete from titles where id = ?"
         rows_affected = self._db.execute(sql, (title_id,))
         return rows_affected > 0
+
+    def exists(self, title: Title) -> bool:
+        sql = "select 1 from titles where title = ? and author_id = ?"
+        row = self._db.fetch_one(sql, (title.title, title.author.id))
+        print(row)
+        if not row:
+            return False
+        return True

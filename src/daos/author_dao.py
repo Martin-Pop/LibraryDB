@@ -85,3 +85,10 @@ class AuthorDAO:
 
         rows_affected = self._db.execute(sql, (author_id,))
         return rows_affected > 0
+
+    def has_titles(self, author_id: int) -> bool:
+        sql = "select 1 from titles where author_id = ?"
+        row = self._db.fetch_one(sql, (author_id,))
+        if not row:
+            return False
+        return True

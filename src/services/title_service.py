@@ -1,3 +1,4 @@
+from src.daos.copy_dao import CopyDAO
 from src.daos.title_dao import TitleDAO
 from src.daos.author_dao import AuthorDAO
 from src.models.entities import Title, Author
@@ -7,8 +8,10 @@ from src.utils import InvalidParameterException
 class TitleService:
 
     def __init__(self, db_manager):
+        self._db = db_manager
         self._title_dao = TitleDAO(db_manager)
         self._author_dao = AuthorDAO(db_manager)
+        self._copy_dao = CopyDAO(db_manager)
 
     def _validate(self, title: str, isbn: str | None, page_count: int | None, price: float):
         errors = []
@@ -23,7 +26,7 @@ class TitleService:
             if not clean_isbn.isdigit():
                 errors.append("ISBN must contain only numbers.")
 
-            elif len(clean_isbn) not in (10, 13):
+            elif len(clean_isbn) < 10 or len(clean_isbn) > 13:
                 errors.append("ISBN must be between 10 and 13 digits.")
 
         if page_count and page_count <= 0:
@@ -45,9 +48,16 @@ class TitleService:
 
         author = self._author_dao.get_by_name(author_name)
         if not author:
-            raise InvalidParameterException("Author not found")
+            author = Author(0, author_name, None)
+            success = self._author_dao.create(author)
+            if not success:
+                raise InvalidParameterException("Author was not found and his creation failed.")
 
         book = Title(0, author, title, isbn, page_count, price, description)
+        exists = self._title_dao.exists(book)
+        if exists:
+            raise InvalidParameterException("Title from this author already exists.")
+
         if self._title_dao.create(book):
             return book
         return None
@@ -62,12 +72,27 @@ class TitleService:
 
         author = self._author_dao.get_by_name(author_name)
         if not author:
-            raise InvalidParameterException("Author not found")
+            author = Author(0, author_name, None)
+            success = self._author_dao.create(author)
+            if not success:
+                raise InvalidParameterException("Author was not found and his creation failed.")
 
         book = Title(title_id, author, title, isbn, page_count, price, description)
+        exists = self._title_dao.exists(book)
+        if exists:
+            raise InvalidParameterException("Title from this author already exists.")
+
         return self._title_dao.update(book)
 
     def remove_title(self, title_id: int) -> bool:
+
+        title = self._title_dao.get_by_id(title_id)
+        if not title:
+            raise InvalidParameterException("Title was not found.")
+
+        #try remove copies
+        self._copy_dao.delete_copies_by_title_id(title_id)
+
         return self._title_dao.delete(title_id)
 
     def get_titles(self, offset: int, limit: int) -> list:

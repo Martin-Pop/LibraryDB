@@ -136,3 +136,8 @@ class CopyDAO:
         sql = "delete from copies where id = ?"
         rows_affected = self._db.execute(sql, (copy_id,))
         return rows_affected > 0
+
+    def delete_copies_by_title_id(self, title_id: int) -> bool:
+        sql = "delete from copies where title_id = ?"
+        rows_affected = self._db.execute(sql, (title_id,))
+        return rows_affected > 0

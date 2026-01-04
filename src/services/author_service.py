@@ -63,3 +63,6 @@ class AuthorService:
 
     def get_by_id(self, author_id: int) -> Author:
         return self._dao.get_by_id(author_id)
+
+    def has_titles(self, author_id: int) -> bool:
+        return self._dao.has_titles(author_id)
