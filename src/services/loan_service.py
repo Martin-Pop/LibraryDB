@@ -20,6 +20,9 @@ class LoanService:
         if not customer:
             raise InvalidParameterException(f"Customer with code: {customer_code} not found")
 
+        if not customer.is_active:
+            raise InvalidParameterException(f"Customer with code: {customer_code} is not active")
+
         copy = self._copy_dao.get_by_code(copy_code)
         if not copy:
             raise InvalidParameterException(f"Copy with id {copy_code} not found")
@@ -99,6 +102,9 @@ class LoanService:
 
     def remove_loan(self, loan_id: int) -> bool:
         return self._loan_dao.delete(loan_id)
+
+    def is_closed(self, loan_id: int) -> bool:
+        return self._loan_dao.is_closed(loan_id)
 
     def get_loans(self, offset: int, limit: int) -> list:
         return self._loan_dao.get_loans(offset, limit)

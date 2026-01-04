@@ -24,6 +24,15 @@
                    value="{{ customer.email if customer else '' }}" required>
         </div>
 
+        <div class="form-group">
+            <label>
+                <input type="checkbox"
+                       name="active"
+                       {% if customer and customer.is_active %}checked{% endif %}>
+                Is Active?
+            </label>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-save">Save</button>
             <a href="{{ url_for('customers.list_customers') }}" class="btn btn-back">Back</a>

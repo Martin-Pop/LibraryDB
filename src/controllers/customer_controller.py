@@ -59,9 +59,9 @@ def create():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         email = request.form.get('email')
-
+        is_active = True if request.form.get('active') else False
         try:
-            success =  customer_service.register_customer(first_name, last_name, email)
+            success =  customer_service.register_customer(first_name, last_name, email, is_active)
             if success:
                 flash('New customer was added.', 'success')
             else:
@@ -70,7 +70,7 @@ def create():
 
         except Exception as e:
             flash('Error creating customer: ' + parse_db_exception(e), 'error')
-            customer = {'first_name' : first_name, 'last_name': last_name, "email":email}
+            customer = {'first_name' : first_name, 'last_name': last_name, "email":email, 'is_active': is_active}
             return render_template('customer_form.html', title="Create Customer", customer=customer)
 
     return render_template('customer_form.html', title="Create Customer", customer=None)
@@ -91,7 +91,8 @@ def edit(id):
         email = request.form.get('email')
 
         try:
-            success = customer_service.update_customer(id, first_name, last_name, email)
+            is_active = True if request.form.get('active') else False
+            success = customer_service.update_customer(id, first_name, last_name, email, is_active)
             if success:
                 flash('Customer updated successfully.', 'success')
             else:

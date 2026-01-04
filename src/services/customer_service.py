@@ -39,12 +39,13 @@ class CustomerService:
             raise InvalidParameterException("Invalid email address.")
 
 
-    def register_customer(self, first_name: str, last_name: str, email: str) -> Customer | None:
+    def register_customer(self, first_name: str, last_name: str, email: str, is_active: bool) -> Customer | None:
         """
         Registers a new customer.
         :param first_name: customers first name
         :param last_name: customers last name
         :param email: customer email
+        :param is_active: if customer account is activated
         :return: customer object
         """
 
@@ -60,13 +61,13 @@ class CustomerService:
             if not self._dao.does_code_exist(new_code):
                 break
 
-        customer = Customer(0, new_code, first_name, last_name, email, True, datetime.now())
+        customer = Customer(0, new_code, first_name, last_name, email, is_active, datetime.now())
 
         if self._dao.create(customer):
             return customer
         return None
 
-    def update_customer(self, _id: int, first_name: str, last_name: str, email: str) -> bool:
+    def update_customer(self, _id: int, first_name: str, last_name: str, email: str, is_active: bool) -> bool:
 
         customer = self._dao.get_by_id(_id)
         if not customer:
@@ -81,6 +82,7 @@ class CustomerService:
         customer.first_name = first_name
         customer.last_name = last_name
         customer.email = email
+        customer.is_active = is_active
 
         return self._dao.update(customer)
 

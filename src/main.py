@@ -21,7 +21,6 @@ app.register_blueprint(title_bp)
 app.register_blueprint(copy_bp)
 app.register_blueprint(loan_bp)
 
-#TODO fix loan delete only available if loan is returned
 
 @app.errorhandler(DatabaseConnectionException)
 def handle_db_error(e):

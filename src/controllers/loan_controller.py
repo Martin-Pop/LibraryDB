@@ -44,6 +44,10 @@ def list_loans():
 @loan_bp.route('/delete/<int:id>', methods=['POST'])
 def delete(id):
     try:
+        is_closed = loan_service.is_closed(id)
+        if not is_closed:
+            raise Exception('Loan is not closed')
+
         success = loan_service.remove_loan(id)
         if success:
             flash('Loan was deleted.', 'success')

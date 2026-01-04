@@ -150,3 +150,11 @@ class LoanDAO:
         sql = "delete from loans where id = ?"
         rows_affected = self._db.execute(sql, (loan_id,))
         return rows_affected > 0
+
+    def is_closed(self, loan_id: int) -> bool:
+        sql = "select return_date from loans where id = ?"
+        row = self._db.fetch_one(sql, (loan_id,))
+        if not row:
+            return False
+        else:
+            return row[0] is not None
