@@ -2,28 +2,13 @@ from src.models.entities import Loan, Customer, Copy, Title, Author, CopyStatus
 
 
 class LoanDAO:
-
-    select = """
-            select 
-                l.id, l.loan_date, l.return_date,
-                c.id, c.code, c.first_name, c.last_name, c.email, c.is_active, c.registration_date,
-                cp.id, cp.code, cp.location, cp.status,
-                t.id, t.title, t.isbn, t.page_count, t.price, t.description,
-                a.id, a.name, a.nationality
-            from loans l
-            join customers c on l.customer_id = c.id
-            join copies cp on l.copy_id = cp.id
-            join titles t on cp.title_id = t.id
-            join authors a on t.author_id = a.id
-        """
-
+    # v_loans view:
     # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-22)
-
     def __init__(self, db_manager):
         self._db = db_manager
 
     def get_loan_by_codes(self, customer_code: str, copy_code: str):
-        sql = self.select + "where c.code = ? and cp.code = ?"
+        sql = "select * from v_loans where c_code = ? and cp_code = ?"
         row = self._db.fetch_one(sql, (customer_code, copy_code))
 
         if not row:
@@ -38,7 +23,7 @@ class LoanDAO:
 
 
     def get_by_id(self, loan_id: int) -> Loan | None:
-        sql = self.select + "where l.id = ?"
+        sql = "select * from v_loans where l_id = ?"
         row = self._db.fetch_one(sql, (loan_id,))
 
         if not row:
@@ -53,7 +38,7 @@ class LoanDAO:
 
 
     def get_loans(self, offset: int, limit: int) -> list:
-        sql = self.select + "order by l.id offset ? rows fetch next ? rows only"
+        sql = "select * from v_loans order by l_id offset ? rows fetch next ? rows only"
 
         # Loan (0-2), Customer (3-9), Copy (10-13), Title (14-19), Author (20-22)
 

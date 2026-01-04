@@ -48,3 +48,22 @@ create table loans (
     loan_date datetime default getdate(), 
     return_date datetime null 
 );
+
+-- loan view
+go
+create view v_loans as
+select 
+    l.id as l_id, l.loan_date, l.return_date,
+    c.id as c_id, c.code as c_code, c.first_name, c.last_name, c.email, c.is_active, c.registration_date,
+    cp.id as cp_id, cp.code as cp_code, cp.location, cp.status,
+    t.id as t_id, t.title, t.isbn, t.page_count, t.price, t.description,
+    a.id as a_id, a.name, a.nationality
+from loans l
+join customers c on l.customer_id = c.id
+join copies cp on l.copy_id = cp.id
+join titles t on cp.title_id = t.id
+join authors a on t.author_id = a.id;
+go
+
+
+
