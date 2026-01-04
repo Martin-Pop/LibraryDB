@@ -4,7 +4,12 @@
 
 <div class="list-header">
     <h1>{{ title }}</h1>
-    <a href="{{ url_for(entity_name + '.create') }}" class="btn btn-add">Add</a>
+    <div>
+        <a href="{{ url_for(entity_name + '.create') }}" class="btn btn-add">Add</a>
+        {% if entity_name in ('customers',) %}
+            <a href="{{ url_for(entity_name + '.bulk_add') }}" class="btn btn-bulk-add">Bulk-Add</a>
+        {% endif %}
+    </div>
 </div>
 
 <div class="table-responsive">

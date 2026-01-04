@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.service_container import customer_service
 from src.utils import parse_db_exception
+import csv
 
 customer_bp = Blueprint('customers', __name__, url_prefix='/customers')
 
@@ -103,3 +104,35 @@ def edit(id):
             flash('Error editing customer: ' + parse_db_exception(e), 'error')
 
     return render_template('customer_form.html', title="Edit Customer", customer=customer)
+
+@customer_bp.route('/bulk-add', methods=['GET', 'POST'])
+def bulk_add():
+
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file found.', 'error')
+            return redirect(request.url)
+
+        file = request.files.get('file')
+        if not file:
+            flash('No file selected.', 'error')
+            return redirect(request.url)
+
+        has_header = request.form.get('has_header') is not None
+
+        try:
+            csv_text = file.read().decode('utf-8')
+            csv_lines = csv_text.splitlines()
+            csv_reader = csv.reader(csv_lines, delimiter=',')
+
+            lines_effected = customer_service.bulk_csv_add(csv_reader, has_header)
+            if lines_effected > 0:
+                flash(f'Bulk import successful. (lines effected{lines_effected})', 'success')
+            else:
+                flash(f'Bulk import failed, probably empty csv', 'error')
+            return redirect(url_for('customers.list_customers'))
+
+        except Exception as e:
+            flash('Error editing customer: ' + parse_db_exception(e), 'error')
+
+    return render_template('import_form.html', title="Bulk Add Customers", back_url=url_for('customers.list_customers'))
