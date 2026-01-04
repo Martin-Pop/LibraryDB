@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="stats-container">
+    <h1>Library Stats</h1>
+
+    {% if stats %}
+
+    <h3 class="section-title">Title Overview</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_titles }}</div>
+            <div class="stat-label">Unique Titles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_authors }}</div>
+            <div class="stat-label">Authors Registered</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_pages_inventory }}</div>
+            <div class="stat-label">Total Title Pages</div>
+        </div>
+    </div>
+
+    <h3 class="section-title">Inventory Health</h3>
+    <div class="stats-grid">
+        <div class="stat-card highlight-blue">
+            <div class="stat-value">{{ stats.total_physical_copies }}</div>
+            <div class="stat-label">Total Physical Copies</div>
+        </div>
+        <div class="stat-card highlight-green">
+            <div class="stat-value">{{ stats.copies_available }}</div>
+            <div class="stat-label">Available on Shelf</div>
+        </div>
+        <div class="stat-card highlight-red">
+            <div class="stat-value">{{ stats.copies_lost }}</div>
+            <div class="stat-label">Lost / Discarded</div>
+        </div>
+    </div>
+
+    <h3 class="section-title">Activity & Users</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.active_customers }}</div>
+            <div class="stat-label">Active Users</div>
+            <small>Total users: {{ stats.total_customers }}</small>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.currently_borrowed }}</div>
+            <div class="stat-label">Books Currently Out</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.all_time_loans }}</div>
+            <div class="stat-label">All-Time Loans Count</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.max_days_held if stats.max_days_held else 0 }} days</div>
+            <div class="stat-label">Longest Active Loan</div>
+        </div>
+    </div>
+
+    <h3 class="section-title">Financial Report</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">${{ stats.total_library_value }}</div>
+            <div class="stat-label">Total Asset Value</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${{ stats.avg_book_price }}</div>
+            <div class="stat-label">Avg. Book Price</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${{ stats.max_book_price }}</div>
+            <div class="stat-label">Most Expensive Book</div>
+        </div>
+    </div>
+
+    {% else %}
+        <p>No statistics data found.</p>
+    {% endif %}
+</div>
+
+<style>
+
+</style>
+{% endblock %}

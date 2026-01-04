@@ -66,4 +66,33 @@ join authors a on t.author_id = a.id;
 go
 
 
+-- stats views
+go
+create or alter view v_stats as
+select
+    -- author stats
+    (select count(*) from authors) as total_authors,
 
+    -- title stats
+    (select count(*) from titles) as total_titles,
+    (select max(price) from titles) as max_book_price,
+    (select cast(avg(price) as decimal(10,2)) from titles) as avg_book_price,
+    (select sum(t.page_count) from titles t join copies c on c.title_id = t.id) as total_pages_inventory,
+
+    -- copy stast
+    (select count(*) from copies) as total_physical_copies,
+    (select count(*) from copies where status = 'available') as copies_available,
+    (select count(*) from copies where status = 'lost' or status = 'discarded') as copies_lost,
+    
+    -- finance
+    (select sum(t.price) from titles t join copies c on c.title_id = t.id) as total_library_value,
+
+    -- customer stats
+    (select count(*) from customers) as total_customers,
+    (select count(*) from customers where is_active = 1) as active_customers,
+
+    -- loans stast
+    (select count(*) from loans) as all_time_loans,
+    (select count(*) from loans where return_date is null) as currently_borrowed,
+    (select max(datediff(day, loan_date, getdate())) from loans where return_date is null) as max_days_held;
+go

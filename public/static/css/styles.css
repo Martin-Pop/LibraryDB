@@ -317,3 +317,50 @@ textarea.form-input {
     text-align: center;
     margin-top: 50px;
 }
+
+/* STATS */
+.stats-container {
+    padding: 20px;
+}
+
+.section-title {
+    margin-top: 2em;
+    margin-bottom: 1em;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    color: #555;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1em;
+}
+
+.stat-card {
+    background: white;
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    border-top: 4px solid #ddd;
+}
+
+.stat-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #777;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Highlights */
+.highlight-blue { border-top-color: #3498db; }
+.highlight-green { border-top-color: #2ecc71; }
+.highlight-red { border-top-color: #e74c3c; }
