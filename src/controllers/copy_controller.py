@@ -42,13 +42,13 @@ def delete(id):
     try:
         success = copy_service.remove_copy(id)
         if success:
-            flash('Customer was removed.', 'success')
+            flash('Copy was removed.', 'success')
         else:
             flash('Error while deleting.', 'error')
     except Exception as e:
         flash('Error deleting copy: '+ parse_db_exception(e), 'error')
 
-    return redirect(url_for('customers.list_customers'))
+    return redirect(url_for('copies.list_copies'))
 
 
 @copy_bp.route('/create', methods=['GET', 'POST'])
