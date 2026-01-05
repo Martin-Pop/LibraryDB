@@ -8,7 +8,6 @@ from src.controllers.stats_controller import stats_bp
 from src.controllers.title_controller import title_bp
 from src.controllers.copy_controller import copy_bp
 from src.main.utils import DatabaseConnectionException
-
 from src.main.utils import get_base_paths, get_webserver_config
 
 paths = get_base_paths()
@@ -16,7 +15,6 @@ paths = get_base_paths()
 template_folder = os.path.join(paths['public_path'], 'templates')
 static_folder = os.path.join(paths['public_path'], 'static')
 web_config_path = os.path.join(paths['config_path'], 'webserver_config.json')
-
 
 app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
 app.register_blueprint(authors_bp)
@@ -40,7 +38,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(
         filename=paths['log_path'],
-        level=logging.INFO,
+        level=logging.ERROR,
         format='%(asctime)s - %(levelname)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
@@ -49,11 +47,14 @@ if __name__ == '__main__':
     console_handler.setLevel(logging.ERROR)
     logging.getLogger().addHandler(console_handler)
 
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.WARNING)
+
     try:
         valid_host, valid_port, valid_secret_key = get_webserver_config(web_config_path)
         app.secret_key = valid_secret_key
 
+        print(f" * Server listening on {valid_host}:{valid_port}")
         app.run(host=valid_host, port=valid_port,debug=False)
-        print(f"Server started at {valid_host}:{valid_port}")
     except Exception as e:
         logging.error(f"Error: {e}")

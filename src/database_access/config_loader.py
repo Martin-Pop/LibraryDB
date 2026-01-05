@@ -59,7 +59,7 @@ class ConfigLoader:
         #make connection string
         return (
             f"DRIVER={{{self._config_data['driver']}}};"
-            f"SERVER={self._config_data['server']};"
+            f"SERVER={self._config_data['server']},{self._config_data['port']};"
             f"PORT={self._config_data['port']};"
             f"DATABASE={self._config_data['database']};"
             f"UID={self._config_data['uid']};"
