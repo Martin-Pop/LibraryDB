@@ -2,7 +2,7 @@ from src.daos.copy_dao import CopyDAO
 from src.daos.title_dao import TitleDAO
 from src.daos.author_dao import AuthorDAO
 from src.models.entities import Title, Author
-from src.utils import InvalidParameterException, ObjectAlreadyExistsException
+from src.main.utils import InvalidParameterException, ObjectAlreadyExistsException
 
 
 class TitleService:

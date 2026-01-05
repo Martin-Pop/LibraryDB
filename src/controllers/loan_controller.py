@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
-from src.service_container import loan_service, customer_service, copy_service
-from src.utils import parse_db_exception
+from src.main.service_container import loan_service, customer_service, copy_service
+from src.main.utils import parse_db_exception
 from src.models.entities import CopyStatus
 
 loan_bp = Blueprint('loans', __name__, url_prefix='/loans')

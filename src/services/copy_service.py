@@ -1,7 +1,7 @@
 from src.daos.title_dao import TitleDAO
 from src.daos.copy_dao import CopyDAO
-from src.models.entities import Title, Copy, CopyStatus
-from src.utils import InvalidParameterException
+from src.models.entities import Copy, CopyStatus
+from src.main.utils import InvalidParameterException
 
 
 class CopyService:

@@ -3,7 +3,7 @@ from src.daos.loan_dao import LoanDAO
 from src.daos.customer_dao import CustomerDAO
 from src.daos.copy_dao import CopyDAO
 from src.models.entities import Loan, CopyStatus
-from src.utils import InvalidParameterException
+from src.main.utils import InvalidParameterException
 
 
 class LoanService:

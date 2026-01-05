@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
-from src.service_container import author_service
-from src.utils import parse_db_exception
+from src.main.service_container import author_service
+from src.main.utils import parse_db_exception
 
 authors_bp = Blueprint('authors', __name__, url_prefix='/authors')
 

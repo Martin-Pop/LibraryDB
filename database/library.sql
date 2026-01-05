@@ -8,10 +8,11 @@ create table customers (
 	code varchar(20) unique not null,
 	first_name varchar(100) not null,
     last_name varchar(100) not null,
-    email varchar(100) not null,
+    email varchar(100) not null unique,
     is_active bit default 1,
     registration_date datetime default getdate()
 );
+
 
 -- authors
 create table authors (

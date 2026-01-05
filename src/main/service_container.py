@@ -8,9 +8,11 @@ from src.services.loan_service import LoanService
 import os
 
 from src.services.title_service import TitleService
+from src.main.utils import get_base_paths
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(current_dir, '..' ,'config', 'db_config.json')
+paths = get_base_paths()
+
+config_path = os.path.join(paths['config_path'], 'db_config.json')
 
 config_loader = ConfigLoader(config_path)
 connection_string = config_loader.get_connection_string()

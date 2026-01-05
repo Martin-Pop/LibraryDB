@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from src.service_container import customer_service
-from src.utils import parse_db_exception
+from src.main.service_container import customer_service
+from src.main.utils import parse_db_exception
 import csv
 
 customer_bp = Blueprint('customers', __name__, url_prefix='/customers')
@@ -125,11 +125,11 @@ def bulk_add():
             csv_lines = csv_text.splitlines()
             csv_reader = csv.reader(csv_lines, delimiter=',')
 
-            lines_effected = customer_service.bulk_csv_add(csv_reader, has_header)
-            if lines_effected > 0:
-                flash(f'Bulk import successful. (lines effected{lines_effected})', 'success')
+            added, skipped = customer_service.bulk_csv_add(csv_reader, has_header)
+            if added > 0:
+                flash(f'Bulk import successful. (added - {added}, skipped - {skipped})', 'success')
             else:
-                flash(f'Bulk import failed, probably empty csv', 'error')
+                flash(f'Bulk import failed, probably empty csv or all customers already exists', 'error')
             return redirect(url_for('customers.list_customers'))
 
         except Exception as e:

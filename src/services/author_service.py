@@ -1,6 +1,6 @@
 from src.daos.author_dao import AuthorDAO
 from src.models.entities import Author
-from src.utils import InvalidParameterException
+from src.main.utils import InvalidParameterException
 
 class AuthorService:
 

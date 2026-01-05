@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash
-from src.service_container import db_manager
+from src.main.service_container import db_manager
 
 stats_bp = Blueprint('stats', __name__, url_prefix='/stats')
 

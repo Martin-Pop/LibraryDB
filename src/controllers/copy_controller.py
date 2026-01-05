@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from src.service_container import copy_service
+from src.main.service_container import copy_service
 from src.models.entities import CopyStatus
-from src.utils import parse_db_exception
+from src.main.utils import parse_db_exception
 
 copy_bp = Blueprint('copies', __name__, url_prefix='/copies')
 

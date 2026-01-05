@@ -1,5 +1,5 @@
 import pyodbc
-from src.utils import DatabaseConnectionException
+from src.main.utils import DatabaseConnectionException
 
 class DatabaseConnectionManager:
     _instance = None

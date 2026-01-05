@@ -1,5 +1,4 @@
 from src.models.entities import Title, Author
-from src.utils import InvalidParameterException
 
 
 class TitleDAO:

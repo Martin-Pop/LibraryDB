@@ -1,6 +1,6 @@
 from src.daos.customer_dao import CustomerDAO
 from src.models.entities import Customer
-from src.utils import InvalidParameterException
+from src.main.utils import InvalidParameterException
 
 from datetime import datetime
 import string
@@ -105,8 +105,10 @@ class CustomerService:
     def get_by_code(self, code: str) -> Customer | None:
         return self._dao.get_by_code(code)
 
-    def bulk_csv_add(self, csv_reader, has_header: bool) -> int:
+    def bulk_csv_add(self, csv_reader, has_header: bool) -> tuple[int, int]:
         line = 0
+        added = 0
+        skipped = 0
         try:
             self._db.begin_transaction()
             if has_header:
@@ -118,12 +120,16 @@ class CustomerService:
                 last_name = row[1].strip()
                 email = row[2].strip()
                 is_active = True if row[3].strip().lower() in ('true', '1', 'yes', 't') else False
+                try:
+                    self.register_customer(first_name, last_name, email, is_active)
+                    added += 1
+                except Exception as e:
+                    skipped += 1
 
-                self.register_customer(first_name, last_name, email, is_active)
                 line += 1
 
             self._db.commit()
-            return line -1
+            return added, skipped
         except IndexError:
             raise Exception(f"Not enough columns in csv (line {line})")
         except Exception as e:
