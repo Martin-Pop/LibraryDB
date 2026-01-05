@@ -187,7 +187,7 @@ html, body {
     margin-right: 5px;
 }
 .btn-return:hover {
-    background-color: #a07a13
+    background-color: #a07a13;
 }
 
 .btn-disabled {
@@ -198,6 +198,17 @@ html, body {
     color: white;
     margin-right: 5px;
 }
+
+.btn-bulk-add {
+    background-color: #0c9553;
+    color: white;
+    margin-right: 5px;
+}
+
+.btn-bulk-add:hover {
+    background-color: #0a7c45;
+}
+
 
 
 /* PAGES */

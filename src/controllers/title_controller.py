@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.service_container import title_service, author_service
 from src.utils import parse_db_exception
+import csv
 
 title_bp = Blueprint('titles', __name__, url_prefix='/titles')
 
@@ -130,3 +131,35 @@ def edit(id):
         'author_name': title_obj.author.name,
     }
     return render_template('title_form.html', title="Create Title", item=title_data)
+
+@title_bp.route('/bulk-add', methods=['GET', 'POST'])
+def bulk_add():
+
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file found.', 'error')
+            return redirect(request.url)
+
+        file = request.files.get('file')
+        if not file:
+            flash('No file selected.', 'error')
+            return redirect(request.url)
+
+        has_header = request.form.get('has_header') is not None
+
+        try:
+            csv_text = file.read().decode('utf-8')
+            csv_lines = csv_text.splitlines()
+            csv_reader = csv.reader(csv_lines, delimiter=',')
+
+            added, skipped = title_service.bulk_csv_add(csv_reader, has_header)
+            if added > 0:
+                flash(f'Bulk import successful. (added - {added}, skipped - {skipped})', 'success')
+            else:
+                flash(f'Bulk import failed, probably empty csv or all titles already exists', 'error')
+            return redirect(url_for('titles.list_titles'))
+
+        except Exception as e:
+            flash('Error adding titles: ' + parse_db_exception(e), 'error')
+
+    return render_template('import_form.html', title="Bulk Add Titles", back_url=url_for('titles.list_titles'))

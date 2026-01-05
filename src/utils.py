@@ -3,6 +3,9 @@ import re
 class InvalidParameterException(Exception):
     pass
 
+class ObjectAlreadyExistsException(Exception):
+    pass
+
 class DatabaseConnectionException(Exception):
     pass
 

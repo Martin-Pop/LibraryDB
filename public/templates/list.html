@@ -6,7 +6,7 @@
     <h1>{{ title }}</h1>
     <div>
         <a href="{{ url_for(entity_name + '.create') }}" class="btn btn-add">Add</a>
-        {% if entity_name in ('customers',) %}
+        {% if entity_name in ('customers', 'titles') %}
             <a href="{{ url_for(entity_name + '.bulk_add') }}" class="btn btn-bulk-add">Bulk-Add</a>
         {% endif %}
     </div>

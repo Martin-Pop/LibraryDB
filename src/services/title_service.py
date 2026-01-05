@@ -2,7 +2,7 @@ from src.daos.copy_dao import CopyDAO
 from src.daos.title_dao import TitleDAO
 from src.daos.author_dao import AuthorDAO
 from src.models.entities import Title, Author
-from src.utils import InvalidParameterException
+from src.utils import InvalidParameterException, ObjectAlreadyExistsException
 
 
 class TitleService:
@@ -56,7 +56,7 @@ class TitleService:
         book = Title(0, author, title, isbn, page_count, price, description)
         exists = self._title_dao.exists(book)
         if exists:
-            raise InvalidParameterException("Title from this author already exists.")
+            raise ObjectAlreadyExistsException("Title from this author already exists.")
 
         if self._title_dao.create(book):
             return book
@@ -80,7 +80,7 @@ class TitleService:
         book = Title(title_id, author, title, isbn, page_count, price, description)
         exists = self._title_dao.exists(book)
         if exists:
-            raise InvalidParameterException("Title from this author already exists.")
+            raise ObjectAlreadyExistsException("Title from this author already exists.")
 
         return self._title_dao.update(book)
 
@@ -100,3 +100,41 @@ class TitleService:
 
     def get_by_id(self, title_id: int) -> Title | None:
         return self._title_dao.get_by_id(title_id)
+
+    def bulk_csv_add(self, csv_reader, has_header: bool) -> tuple[int,int]:
+        line = 0
+        added = 0
+        skipped = 0
+        try:
+            self._db.begin_transaction()
+            if has_header:
+                next(csv_reader, None)
+
+            line = 1
+            for row in csv_reader:
+                title = row[0].strip()
+                author_name = row[1].strip()
+                isbn = row[2].strip()
+                page_count = row[3].strip()
+                price = row[4].strip()
+                description = row[5].strip()
+
+                page_count = int(page_count) if page_count else None
+                price = float(price)
+
+                try:
+                    self.add_new_title(author_name, title, isbn, page_count, price, description)
+                    added += 1
+                except ObjectAlreadyExistsException:
+                    skipped += 1
+
+                line += 1
+
+            self._db.commit()
+            return added, skipped
+        except IndexError:
+            raise Exception(f"Not enough columns in csv (line {line})")
+        except Exception as e:
+            raise Exception(f"(line {line}): {e}")
+        finally:
+            self._db.rollback()

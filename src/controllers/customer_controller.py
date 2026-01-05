@@ -133,6 +133,6 @@ def bulk_add():
             return redirect(url_for('customers.list_customers'))
 
         except Exception as e:
-            flash('Error editing customer: ' + parse_db_exception(e), 'error')
+            flash('Error adding customers: ' + parse_db_exception(e), 'error')
 
     return render_template('import_form.html', title="Bulk Add Customers", back_url=url_for('customers.list_customers'))

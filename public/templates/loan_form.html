@@ -19,7 +19,7 @@
         <div class="form-group">
             <label>Copy code</label>
             <input type="text" name="copy_code" class="form-input" value="{{ loan.copy_code if loan else '' }}" required
-                   {% if loan or closing %}readonly{% endif %}>
+                   {% if closing %}readonly{% endif %}>
         </div>
 
         {% if closing %}
