@@ -13,16 +13,18 @@ Example:
 
 ## 2. Create new Database and Login
 Create new database using gui or create new query and paste in commands.
-- **Paste in method:**
-	- Create a new query and paste in the commands from `database/databasae_setup.sql`
-	- If you wish to change database name change every line that has `[my_library]` to `[your_own_name]`
-	- Select everything and click execute
-**GUI method**
-	1. Right Click Databases and select 'New Database'
-	2. Fill in 'Database name' and click ok
-	3. Right Click on Logins (Security/Logins) and select 'New Login'
-	4. Fill in 'Login name', select 'SQL Server authentication', fill in passwords and disable enforce password policy
-	5. Click on 'User Mapping', select your database name and add 'db_datareader' and 'db_datawriter', click OK
+
+**Paste in method:**
+1. Create a new query and paste in the commands from `database/databasae_setup.sql`
+2. If you wish to change database name change every line that has `[my_library]` to `[your_own_name]`
+3. Select everything and click execute
+
+**GUI method:**
+1. Right Click Databases and select 'New Database'
+2. Fill in 'Database name' and click ok
+3. Right Click on Logins (Security/Logins) and select 'New Login'
+4. Fill in 'Login name', select 'SQL Server authentication', fill in passwords and disable enforce password policy
+5. Click on 'User Mapping', select your database name and add 'db_datareader' and 'db_datawriter', click OK
 
 ## 3. Create database structure
 Create database structure by pasting in commands.
