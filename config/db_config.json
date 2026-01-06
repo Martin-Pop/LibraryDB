@@ -1,6 +1,6 @@
 {
     "driver": "ODBC Driver 17 for SQL Server",
-    "server": "PC1061",
+    "server": "127.0.0.1,1433",
     "database": "my_library",
     "uid": "library_user",
     "pwd": "pass123"

@@ -9,6 +9,7 @@ from src.controllers.title_controller import title_bp
 from src.controllers.copy_controller import copy_bp
 from src.main.utils import DatabaseConnectionException
 from src.main.utils import get_base_paths, get_webserver_config
+from src.main.service_container import db_manager
 
 paths = get_base_paths()
 
@@ -58,3 +59,6 @@ if __name__ == '__main__':
         app.run(host=valid_host, port=valid_port,debug=False)
     except Exception as e:
         logging.error(f"Error: {e}")
+    finally:
+        if db_manager:
+            db_manager.close_connection()
