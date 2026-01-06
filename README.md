@@ -83,6 +83,6 @@ The **DAO** is the only layer that interacts directly with the database. It isol
 
 ## Installation steps
 1. Download release.
-2. Create database on your Microsoft SQL Server.
-3. Configure configuration files for webserver and database connection.
+2. Create database on your Microsoft SQL Server. Read: `database/DATABASE_INSTALLATION.md`
+3. Configure configuration files for webserver and database connection. Read: `config/CONFIGURATION.md`
 4. Open library dashboard in your browser.
