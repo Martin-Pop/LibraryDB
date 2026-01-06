@@ -21,7 +21,7 @@ class ConfigLoader:
         return self._config_data
 
     def _validate_data(self):
-        required_keys = ["driver", "server", "database", "port", "uid", "pwd"]
+        required_keys = ["driver", "server", "database", "uid", "pwd"]
 
         for key in required_keys:
             if key not in self._config_data:
@@ -30,7 +30,6 @@ class ConfigLoader:
         driver = self._config_data["driver"]
         server = self._config_data["server"]
         database = self._config_data["database"]
-        port = self._config_data["port"]
         uid = self._config_data["uid"]
 
 
@@ -46,22 +45,9 @@ class ConfigLoader:
         if not isinstance(uid, str) or not uid.strip():
             raise ValueError("Config error: 'uid' (username) must be a string.")
 
-        if not isinstance(port, int):
-            raise TypeError(f"Config error: 'port' must be a number")
-
-        if not (1 <= port <= 65535):
-            raise ValueError(f"Config error: 'port' must be in range from 1 to 65535. Found: {port}")
-
     def get_connection_string(self):
         if not self._config_data:
             self.load_config()
 
         #make connection string
-        return (
-            f"DRIVER={{{self._config_data['driver']}}};"
-            f"SERVER={self._config_data['server']},{self._config_data['port']};"
-            f"PORT={self._config_data['port']};"
-            f"DATABASE={self._config_data['database']};"
-            f"UID={self._config_data['uid']};"
-            f"PWD={self._config_data['pwd']}"
-        )
+        return f"DRIVER={{{self._config_data['driver']}}};SERVER={self._config_data['server']};DATABASE={self._config_data['database']};UID={self._config_data['uid']};PWD={self._config_data['pwd']}"

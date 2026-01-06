@@ -16,7 +16,6 @@ config_path = os.path.join(paths['config_path'], 'db_config.json')
 
 config_loader = ConfigLoader(config_path)
 connection_string = config_loader.get_connection_string()
-
 db_manager = DatabaseConnectionManager(connection_string)
 # db_manager.test_connection()
 
