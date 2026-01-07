@@ -10,11 +10,11 @@ class CopyService:
         self._copy_dao = CopyDAO(db_manager)
         self._title_dao = TitleDAO(db_manager)
 
-    def add_new_copy(self, title_name: str, code: str, location: str | None, status: CopyStatus ) -> Copy | None:
+    def add_new_copy(self, title_name: str, author_name: str, code: str, location: str | None, status: CopyStatus ) -> Copy | None:
 
         location = location.strip() if location else None
 
-        title = self._title_dao.get_by_title(title_name)
+        title = self._title_dao.get_by_title_author_name(title_name, author_name)
         if not title:
             raise InvalidParameterException("Title not found")
 
@@ -23,11 +23,11 @@ class CopyService:
             return copy
         return None
 
-    def update_copy(self,copy_id: int, title_name: str, code: str, location: str | None, status: CopyStatus) -> bool:
+    def update_copy(self,copy_id: int, title_name: str, author_name: str, code: str, location: str | None, status: CopyStatus) -> bool:
 
         location = location.strip() if location else None
 
-        title = self._title_dao.get_by_title(title_name)
+        title = self._title_dao.get_by_title_author_name(title_name, author_name)
         if not title:
             raise InvalidParameterException("Title not found")
 

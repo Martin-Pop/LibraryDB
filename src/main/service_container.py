@@ -5,19 +5,24 @@ from src.services.copy_service import CopyService
 from src.services.customer_service import CustomerService
 from src.services.loan_service import LoanService
 
-import os
+import os, logging, sys
 
 from src.services.title_service import TitleService
 from src.main.utils import get_base_paths
 
+logger = logging.getLogger(__name__)
 paths = get_base_paths()
 
 config_path = os.path.join(paths['config_path'], 'db_config.json')
 
 config_loader = ConfigLoader(config_path)
-connection_string = config_loader.get_connection_string()
-db_manager = DatabaseConnectionManager(connection_string)
-# db_manager.test_connection()
+db_manager = None
+try:
+    connection_string = config_loader.get_connection_string()
+    db_manager = DatabaseConnectionManager(connection_string)
+except Exception as e:
+    logger.error(e)
+    sys.exit(1)
 
 #SERVICES
 author_service = AuthorService(db_manager)

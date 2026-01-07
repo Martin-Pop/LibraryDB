@@ -98,15 +98,7 @@ def edit(id):
         copy_code = request.form['copy_code']
 
         try:
-            customer = customer_service.get_by_code(customer_code)
-            if not customer:
-                raise Exception('Invalid customer code')
-
-            copy = copy_service.get_by_code(copy_code)
-            if not copy:
-                raise Exception('Invalid copy code')
-
-            success = loan_service.update_loan(loan.id, customer.id, copy.id, loan.loan_date, loan.return_date)
+            success = loan_service.update_loan(loan.id, customer_code, copy_code, loan.loan_date, loan.return_date)
             if success:
                 flash('Loan updated successfully.', 'success')
             else:
@@ -130,16 +122,12 @@ def edit(id):
 
 @loan_bp.route('/close/<int:id>', methods=['POST'])
 def close(id):
-    loan = loan_service.get_by_id(id)
-    if not loan:
-        flash('Loan was not found', 'error')
-        return redirect(url_for('loans.list_loans'))
 
     status_str = request.form['status']
 
     try:
         status = CopyStatus(status_str)
-        success = loan_service.close_loan(loan.customer.code, loan.copy.code, status)
+        success = loan_service.close_loan(id, status)
         if success:
             flash('Loan closed successfully.', 'success')
         else:

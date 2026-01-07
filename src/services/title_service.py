@@ -78,7 +78,7 @@ class TitleService:
                 raise InvalidParameterException("Author was not found and his creation failed.")
 
         book = Title(title_id, author, title, isbn, page_count, price, description)
-        exists = self._title_dao.exists(book)
+        exists = self._title_dao.exists(book, True)
         if exists:
             raise ObjectAlreadyExistsException("Title from this author already exists.")
 

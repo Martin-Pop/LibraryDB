@@ -130,7 +130,7 @@ def edit(id):
         'description': title_obj.description if title_obj.description else '',
         'author_name': title_obj.author.name,
     }
-    return render_template('title_form.html', title="Create Title", item=title_data)
+    return render_template('title_form.html', title="Edit Title", item=title_data)
 
 @title_bp.route('/bulk-add', methods=['GET', 'POST'])
 def bulk_add():

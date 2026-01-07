@@ -19,7 +19,7 @@ def list_copies():
         rows.append({
             'id': copy.id,
             'data_values': [
-                copy.id, copy.title.title, copy.code,
+                copy.id, copy.title.title, copy.title.author.name, copy.code,
                 copy.location, copy.status.value
             ]
         })
@@ -30,7 +30,7 @@ def list_copies():
         'list.html',
         title="Copies",
         entity_name='copies',
-        headers=['ID', 'Title', 'Code', 'Location', 'Status'],
+        headers=['ID', 'Title', 'Author' , 'Code', 'Location', 'Status'],
         rows=rows,
         page=page,
         has_next=has_next
@@ -57,13 +57,14 @@ def create():
     if request.method == 'POST':
 
         title = request.form.get('title')
+        author = request.form.get('author')
         code = request.form.get('code')
         location = request.form.get('location')
         status = request.form.get('status')
 
         try:
             status_enum = CopyStatus(status)
-            success =  copy_service.add_new_copy(title, code, location, status_enum)
+            success =  copy_service.add_new_copy(title,author, code, location, status_enum)
             if success:
                 flash('New copy was added.', 'success')
             else:
@@ -72,7 +73,7 @@ def create():
 
         except Exception as e:
             flash('Error creating new copy: ' + parse_db_exception(e), 'error')
-            copy = {'title': title, 'code': code, 'location': location, 'status': status}
+            copy = {'title': title, 'author': author, 'code': code, 'location': location, 'status': status}
             return render_template('copy_form.html', title="Create Copy", copy=copy, statuses=CopyStatus)
 
     return render_template('copy_form.html', title="Create Copy", copy=None, statuses=CopyStatus)
@@ -89,13 +90,14 @@ def edit(id):
     if request.method == 'POST':
 
         title = request.form.get('title')
+        author = request.form.get('author')
         code = request.form.get('code')
         location = request.form.get('location')
         status = request.form.get('status')
 
         try:
             status_enum = CopyStatus(status)
-            success = copy_service.update_copy(copy.id, title, code, location, status_enum)
+            success = copy_service.update_copy(copy.id, title, author, code, location, status_enum)
             if success:
                 flash('Copy updated successfully.', 'success')
             else:
@@ -107,8 +109,9 @@ def edit(id):
 
     copy_values = {
         'title': copy.title.title,
+        'author': copy.title.author.name,
         'code': copy.code,
-        'location': copy.location,
+        'location': copy.location if copy.location else "",
         'status': copy.status.value
     }
     return render_template('copy_form.html', title="Edit Copies", copy=copy_values, statuses=CopyStatus)

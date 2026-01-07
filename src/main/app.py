@@ -1,4 +1,23 @@
 import os, logging
+import sys
+
+from src.main.utils import get_base_paths
+
+paths = get_base_paths()
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler(paths['log_path'])
+file_handler.setLevel(logging.ERROR)
+file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logging.INFO)
+console_formatter = logging.Formatter('%(levelname)s: %(message)s')
+console_handler.setFormatter(console_formatter)
+logger.addHandler(console_handler)
 
 from flask import Flask, render_template
 from src.controllers.author_controller import authors_bp
@@ -8,10 +27,8 @@ from src.controllers.stats_controller import stats_bp
 from src.controllers.title_controller import title_bp
 from src.controllers.copy_controller import copy_bp
 from src.main.utils import DatabaseConnectionException
-from src.main.utils import get_base_paths, get_webserver_config
+from src.main.utils import get_webserver_config
 from src.main.service_container import db_manager
-
-paths = get_base_paths()
 
 template_folder = os.path.join(paths['public_path'], 'templates')
 static_folder = os.path.join(paths['public_path'], 'static')
@@ -37,17 +54,6 @@ def index():
 
 if __name__ == '__main__':
 
-    logging.basicConfig(
-        filename=paths['log_path'],
-        level=logging.ERROR,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.ERROR)
-    logging.getLogger().addHandler(console_handler)
-
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.WARNING)
 
@@ -55,10 +61,10 @@ if __name__ == '__main__':
         valid_host, valid_port, valid_secret_key = get_webserver_config(web_config_path)
         app.secret_key = valid_secret_key
 
-        print(f" * Server listening on {valid_host}:{valid_port}")
+        logger.info(f" Server listening on {valid_host}:{valid_port}")
         app.run(host=valid_host, port=valid_port,debug=False)
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logger.error(f"Error: {e}")
     finally:
         if db_manager:
             db_manager.close_connection()

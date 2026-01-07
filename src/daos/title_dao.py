@@ -19,14 +19,14 @@ class TitleDAO:
         author = Author(*row[:3])
         return Title(title_id, author,*row[3:])
 
-    def get_by_title(self, title: str) -> Title | None:
+    def get_by_title_author_name(self, title: str, author_name: str) -> Title | None:
         sql = """
             select authors.id, authors.name, authors.nationality,
             titles.id, titles.isbn, titles.page_count, titles.price, titles.description
             from titles join authors on titles.author_id = authors.id
-            where titles.title = ?
+            where titles.title = ? and authors.name = ?
         """
-        row = self._db.fetch_one(sql, (title,))
+        row = self._db.fetch_one(sql, (title, author_name))
         if not row:
             return None
 
@@ -106,10 +106,13 @@ class TitleDAO:
         rows_affected = self._db.execute(sql, (title_id,))
         return rows_affected > 0
 
-    def exists(self, title: Title) -> bool:
-        sql = "select 1 from titles where title = ? and author_id = ?"
-        row = self._db.fetch_one(sql, (title.title, title.author.id))
-        print(row)
+    def exists(self, title: Title, is_update=False) -> bool:
+        if is_update:
+            sql = "select 1 from titles where title = ? and author_id = ? and id != ?"
+            row = self._db.fetch_one(sql, (title.title, title.author.id, title.id))
+        else:
+            sql = "select 1 from titles where title = ? and author_id = ?"
+            row = self._db.fetch_one(sql, (title.title, title.author.id))
         if not row:
             return False
         return True

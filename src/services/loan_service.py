@@ -56,12 +56,12 @@ class LoanService:
             self._db.rollback()
             raise e
 
-    def close_loan(self, customer_code: str, copy_code: str, status: CopyStatus) -> bool:
+    def close_loan(self, loan_id: int, status: CopyStatus) -> bool:
 
-        loan = self._loan_dao.get_loan_by_codes(customer_code, copy_code)
+        loan = self._loan_dao.get_by_id(loan_id)
 
         if not loan:
-            raise InvalidParameterException(f"Loan {customer_code} x {copy_code} was not found")
+            raise InvalidParameterException(f"Loan was not found")
 
         if loan.return_date is not None:
             raise InvalidParameterException("This loan is already closed.")
@@ -86,14 +86,13 @@ class LoanService:
             self._db.rollback()
             raise e
 
-    def update_loan(self, loan_id: int, customer_id: int, copy_id: int, loan_date: datetime,
-                    return_date: datetime | None) -> bool:
+    def update_loan(self, loan_id: int, customer_code: str, copy_code: str, loan_date: datetime, return_date: datetime | None) -> bool:
 
-        customer = self._customer_dao.get_by_id(customer_id)
+        customer = self._customer_dao.get_by_code(customer_code)
         if not customer:
             raise InvalidParameterException("Customer not found")
 
-        copy = self._copy_dao.get_by_id(copy_id)
+        copy = self._copy_dao.get_by_code(copy_code)
         if not copy:
             raise InvalidParameterException("Copy not found")
 

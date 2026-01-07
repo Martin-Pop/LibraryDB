@@ -12,6 +12,11 @@
         </div>
 
         <div class="form-group">
+            <label>Author</label>
+            <input type="text" name="author" class="form-input" value="{{ copy.author if copy else '' }}" required>
+        </div>
+
+        <div class="form-group">
             <label>Code</label>
             <input type="text" name="code" class="form-input" value="{{ copy.code if copy else '' }}" required>
         </div>
