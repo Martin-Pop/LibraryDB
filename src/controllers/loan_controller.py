@@ -124,7 +124,6 @@ def edit(id):
 
     if request.args.get('action') == 'return':
         states = [CopyStatus.AVAILABLE.value, CopyStatus.LOST.value, CopyStatus.DISCARDED.value]
-        print(states)
         return render_template('loan_form.html', title="Close Loan", loan=data, closing=True ,statuses=states)
 
     return render_template('loan_form.html', title="Edit Loan", loan=data)
