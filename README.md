@@ -84,7 +84,7 @@ The **DAO** is the only layer that interacts directly with the database. It isol
 
 ## Installation steps
 1. Download Project.
-   - Download latest release.
+   - Download latest [release](https://github.com/Martin-Pop/LibraryDB/releases/tag/Latest) .
    - If you want to compile it yourself:
      - Download / clone this repo
      - Install dependencies `pip install -r requirements.txt`
