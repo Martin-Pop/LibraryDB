@@ -32,9 +32,10 @@ The system implements the following use cases:
 - Database Engine: Microsoft SQL Server (2019 or newer recommended).  
 - Driver: ODBC Driver 17 for SQL Server.  
   
-### Third-Party Libraries (Python)  
+### Third-Party Python Libraries  
 - Flask: Core web framework.  
-- pyodbc: Interface for connecting to Microsoft SQL Server.  
+- pyodbc: Interface for connecting to Microsoft SQL Server.
+- pyinstaller: Compiles project into standalone executable.
   
 ## Database Model  
 The backend utilizes a relational database model.  
@@ -82,7 +83,16 @@ The **DAO** is the only layer that interacts directly with the database. It isol
     -   Returns data to the Service.
 
 ## Installation steps
-1. Download release.
+1. Download Project.
+   - Download latest release.
+   - If you want to compile it yourself:
+     - Download / clone this repo
+     - Install dependencies `pip install -r requirements.txt`
+     - Compile with: `pyinstaller --noconfirm --onedir --console --name "LibraryDB" --paths "." --add-data "public;public" src/main/app.py`
+     - Copy config folder and paste in next to your executable
 2. Create database on your Microsoft SQL Server. Read: `database/DATABASE_INSTALLATION.md`
 3. Configure configuration files for webserver and database connection. Read: `config/CONFIGURATION.md`
 4. Open library dashboard in your browser.
+
+## License
+MIT License
